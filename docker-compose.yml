@@ -149,8 +149,8 @@ services:
       - DATABASE_USERNAME=hppoc
       - DATABASE_PASSWORD=password
     volumes:
-      - ./blockchain-explorer/examples/dockerConfig/config.json:/opt/explorer/app/platform/fabric/config.json
-      - ./blockchain-explorer/examples/dockerConfig/crypto:/tmp/crypto
+      - ./config.json:/opt/explorer/app/platform/fabric/config.json
+      - ./crypto-config:/tmp/crypto
     ports:
       - "8090:8080"
     networks:

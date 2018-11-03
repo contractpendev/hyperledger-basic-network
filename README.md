@@ -1,10 +1,11 @@
 ## Basic Network Config
 
-Note that this basic configuration uses pre-generated certificates and
-key material, and also has predefined transactions to initialize a 
-channel named "mychannel".
+To start the network on Mac OSX do step 1, else continue at step 2.
 
-To regenerate this material, simply run ``generate.sh``.
+1. Run ``./build.sh`` to install tools for generate crypto material.
+2. Create the config.json file in folder blockchain-explorer/examples/dockerConfig/config.json to match crypt-config.yaml and configtx.yaml
+3. Run ``./generate.sh`` to generate the crypto materials.
+4. Run ``./start.sh`` to startup all.
 
 To start the network, run ``start.sh``.
 To stop it, run ``stop.sh``
