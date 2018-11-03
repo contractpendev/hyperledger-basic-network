@@ -27,6 +27,8 @@ The files which were added when compared with basic-network were.
 
 3. The postgreSQLdb folder created with creation script which is run from start.sh to populate the postgreSQL database which Hyperledger Explorer uses. This folders contents came from blockchain-explorer/app/persistence/fabric/postgreSQL/db in the blockchain-explorer project.
 
+4. config.json was added and this file gets added to blockchain-explorer.
+
 ## To start
 
 To start the network on Mac OSX do step 1, other continue at step 2.
