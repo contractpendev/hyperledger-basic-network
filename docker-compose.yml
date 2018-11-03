@@ -133,7 +133,7 @@ services:
       - DATABASE_USERNAME=hppoc
       - DATABASE_PASSWORD=password
     volumes:
-        - /Users/philipandrew/projects/blockchain-explorer/app/persistence/fabric/postgreSQL/db/:/opt/
+        - ./blockchain-explorer/app/persistence/fabric/postgreSQL/db/:/opt/
     ports:
       - "5432:5432"
     networks:
@@ -149,8 +149,8 @@ services:
       - DATABASE_USERNAME=hppoc
       - DATABASE_PASSWORD=password
     volumes:
-      - /Users/philipandrew/projects/blockchain-explorer/examples/dockerConfig/config.json:/opt/explorer/app/platform/fabric/config.json
-      - /Users/philipandrew/projects/blockchain-explorer/examples/dockerConfig/crypto:/tmp/crypto
+      - ./blockchain-explorer/examples/dockerConfig/config.json:/opt/explorer/app/platform/fabric/config.json
+      - ./blockchain-explorer/examples/dockerConfig/crypto:/tmp/crypto
     ports:
       - "8090:8080"
     networks:
