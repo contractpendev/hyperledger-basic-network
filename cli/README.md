@@ -15,7 +15,7 @@ Then run ./ping.sh which shows the following.
 
 ```
 $ ./ping.sh
-Error: Error trying to ping. Error: No business network has been specified for this connection
+Error: Error trying to ping. Error: make sure the chaincode net_basic has been successfully instantiated and try again: getccdata mychannel/net_basic responded with error: could not find chaincode with name 'net_basic'
 Command failed
 
 $ 
