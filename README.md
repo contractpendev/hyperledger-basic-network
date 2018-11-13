@@ -36,3 +36,8 @@ Note that the name eace57fae2d22ab50ab9bdeed7575b701d93794d5b3517c7805d6166c5eba
 To stop it, run ``stop.sh``
 To completely remove all incriminating evidence of the network
 on your system, run ``teardown.sh``.
+
+## Good articles
+
+https://topicfly.io/hyperledger-fabric-composer-swarm/
+
