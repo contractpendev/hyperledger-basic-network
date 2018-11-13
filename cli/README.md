@@ -33,5 +33,7 @@ delete.sh Deletes card
 
 ping.sh Attempts to ping network with composer command
 
+There is a test.bna business network archive I would like to deploy
+
 
 
