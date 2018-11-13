@@ -7,7 +7,7 @@ Install the composer-cli as follows.
 
 I created a connection.json file, I think this file has the correct contents.
 
-You will need to edit the file createcard.sh to place the correct key name in here. See path ./../crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp/keystore/
+You will need to edit the file createcard.sh to place the correct key name in here. See path ./../crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/
 
 Then run ./createcard.sh which should create the file PeerAdmin@hlfv1.card
 
