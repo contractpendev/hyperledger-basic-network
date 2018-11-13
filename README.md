@@ -39,7 +39,7 @@ To start the network on Mac OSX do step 1, other continue at step 2.
 3. Run ``./generate.sh`` to generate the crypto materials.
 4. Edit the docker-compose.yml and edit line 18 which currently looks as follows
 ```
-         - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/eace57fae2d22ab50ab9bdeed7575b701d93794d5b3517c7805d6166c5eba67b_sk
+- FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/eace57fae2d22ab50ab9bdeed7575b701d93794d5b3517c7805d6166c5eba67b_sk
 ```
 Change to make its filename match the existing one in this relative directory 
 ```
