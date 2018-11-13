@@ -3,21 +3,7 @@
 The goal of this project is to have a simple Hyperledger network working via docker based upon the basic network from [Basic Network](https://github.com/hyperledger/fabric-samples/tree/master/basic-network)
  AND with the Hyperledger Exploer added to the docker-compose.yml.
 
- Currently Hyperledger Explorer Browser cannot connect to the blockchain network. So if after starting with ``./start.sh`` then if ``docker logs blockchain-explorer`` it will show the problem is that here it cannot connect:
-
  Please open web browser to access ：http://localhost:8080/
-
-```
-pid is 6
-
-
-postgres://hppoc:password@blockchain-explorer-db:5432/explorer_db_name
-
-Sync process is started for the network : [network-1] and client : [client-1]
-<<<<<<<<<<<<<<<<<<<<<<<<<< Synchronizer Error >>>>>>>>>>>>>>>>>>>>>
-Error :  [ 'Failed to connect client peer, please check the configuration and peer status' ]
-<<<<<<<<<<<<<<<<<<<<<<<<<< Closing client processor >>>>>>>>>>>>>>>>>>>>>
-```
 
 The files which were added when compared with basic-network were.
 
