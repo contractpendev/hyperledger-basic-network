@@ -1,1 +1,1 @@
-composer network ping --card PeerAdmin@net_basic
+composer network ping --card PeerAdmin@fabcar
