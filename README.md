@@ -3,7 +3,7 @@
 The goal of this project is to have a simple Hyperledger network working via docker based upon the basic network from [Basic Network](https://github.com/hyperledger/fabric-samples/tree/master/basic-network)
  AND with the Hyperledger Exploer added to the docker-compose.yml.
 
- Please open web browser to access ：http://localhost:8080/
+ Please open web browser to access ：http://localhost:8090/
 
 The files which were added when compared with basic-network were.
 
