@@ -5,7 +5,9 @@ https://medium.com/coinmonks/hyperledger-fabric-composer-errors-solutions-827112
 
 ## I am trying to get composer cli to run successfully
 
-In here I am attempting to use the composer command line to connect to hyperledger.
+This containing git project starts hyperledger successfully, go up to the project hyperledger-basic-network to read its README.md.
+
+In here I am attempting to use the composer command line to connect to hyperledger within this project.
 
 Install the composer-cli as follows.
 
