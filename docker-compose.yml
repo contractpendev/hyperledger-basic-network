@@ -157,6 +157,7 @@ services:
     networks:
       - basic
 
+
 #peer chaincode install -n fabcar -v 1.0 -p . -l golang
 #peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l golang -v 1.0 -c '{"Args":[""]}' -P "OR ('Org1MSP.member','Org2MSP.member')"
 #peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabcar -c '{"function":"changeCarOwner","Args":["CAR8","NEWOWNER"]}'
