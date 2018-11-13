@@ -30,6 +30,7 @@ Change to make its filename match the existing one in this relative directory
 ./crypto-config/peerOrganizations/org1.example.com/ca/eace57fae2d22ab50ab9bdeed7575b701d93794d5b3517c7805d6166c5eba67b_sk
 ```
 Note that the name eace57fae2d22ab50ab9bdeed7575b701d93794d5b3517c7805d6166c5eba67b_sk will be different.
+
 5. Run ``./start.sh`` to startup all.
 
 To stop it, run ``stop.sh``
