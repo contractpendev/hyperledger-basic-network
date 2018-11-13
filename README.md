@@ -3,7 +3,7 @@
 The goal of this project is to have a simple Hyperledger network working via docker based upon the basic network from [Basic Network](https://github.com/hyperledger/fabric-samples/tree/master/basic-network)
  AND with the Hyperledger Exploer added to the docker-compose.yml.
 
- Please open web browser to access ：http://localhost:8090/
+Follow the startup steps at end of this document then open web browser to access ：http://localhost:8090/
 
 The files which were added when compared with basic-network were.
 
@@ -17,8 +17,6 @@ The files which were added when compared with basic-network were.
 Its based upon https://github.com/hyperledger/blockchain-explorer/blob/master/examples/net1/config.json
 
 ## To start
-
-To start the network on Mac OSX do step 1, other continue at step 2.
 
 1. Run ``./build.sh`` to install tools for generate crypto material.
 2. Create the file config.json file which came from  blockchain-explorer/examples/dockerConfig/config.json to match crypt-config.yaml and configtx.yaml
