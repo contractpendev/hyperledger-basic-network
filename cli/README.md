@@ -1,4 +1,10 @@
 
+Useful link?
+
+https://medium.com/coinmonks/hyperledger-fabric-composer-errors-solutions-827112a3fce6
+
+## I am trying to get composer cli to run successfully
+
 In here I am attempting to use the composer command line to connect to hyperledger.
 
 Install the composer-cli as follows.
