@@ -27,8 +27,6 @@ Command failed
 $ 
 ```
 
-Why? Maybe the CERT_KEY and PRIVATE_KEY are specified as the wrong files.
-
 ## Scripts
 
 go.sh This does everything, deletes cards, starts again and attempts to ping
