@@ -20,3 +20,5 @@ Command failed
 
 $
 ```
+
+Why? Maybe the CERT_KEY and PRIVATE_KEY are specified as the wrong files.
