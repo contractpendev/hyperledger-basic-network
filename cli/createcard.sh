@@ -3,10 +3,11 @@
 
 PRIVATE_KEY=./../crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore/ee740c18c4ea0c4c3f013a0bd3cd64a3b18827ab81a3e6fe3fe93473581e1346_sk
 CERT=./../crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/admincerts/Admin@org1.example.com-cert.pem
+# Should the next line have the following network? -n net_basic
 composer card create -p ./connection.json -u PeerAdmin -c "$CERT" -k "$PRIVATE_KEY" -r PeerAdmin -r ChannelAdmin --file ./PeerAdmin@net_basic.card
 composer card import --file ./PeerAdmin@net_basic.card 
 composer card list
 
-#  -n net_basic
+
 
 
