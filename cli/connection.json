@@ -1,5 +1,5 @@
 {
-    "name": "hlfv1",
+    "name": "net_basic",
     "x-type": "hlfv1",
     "x-commitTimeout": 300,
     "version": "1.0.0",

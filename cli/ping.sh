@@ -1,1 +1,1 @@
-composer network ping --card PeerAdmin@hlfv1
+composer network ping --card PeerAdmin@net_basic
