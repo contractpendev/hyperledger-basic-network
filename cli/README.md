@@ -15,8 +15,8 @@ Then run ./ping.sh which shows the following.
 
 ```
 $ ./ping.sh
-Error: Error trying to ping. Error: No business network has been specified for this connection
+Error: Error trying to ping. Error: 2 UNKNOWN: access denied: channel [mychannel] creator org [Org1MSP]
 Command failed
 
-$ 
+$
 ```
