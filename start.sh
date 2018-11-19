@@ -36,6 +36,6 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/h
 # peer channel list
 
 docker-compose -f docker-compose.yml up -d blockchain-explorer
-
+docker-compose -f docker-compose.yml up -d cli
 
 
