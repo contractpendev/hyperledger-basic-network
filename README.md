@@ -20,8 +20,12 @@ Its based upon https://github.com/hyperledger/blockchain-explorer/blob/master/ex
 
 1. Run ``./build.sh`` to install tools for generate crypto material.
 2. Create the file config.json file which came from  blockchain-explorer/examples/dockerConfig/config.json to match crypt-config.yaml and configtx.yaml
-3. Run ``./generate.sh`` to generate the crypto materials.
-4. Edit the docker-compose.yml and edit line 18 which currently looks as follows
+3. Run ``./gen1.sh`` to generate the crypto materials.
+4. Run ``./gen2.sh`` to generate the channel crypto materials.
+5. Run ``./gen3.sh`` to generate environment variable which is used for docker-compose.
+6. DO NOT DO THIS STEP !!!! Edit the docker-compose.yml and edit line 18 which currently looks as follows
+
+export WHAT=$(ls ./crypto-config/peerOrganizations/org1.example.com/ca/*_sk)
 ```
 - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/eace57fae2d22ab50ab9bdeed7575b701d93794d5b3517c7805d6166c5eba67b_sk
 ```
@@ -31,7 +35,7 @@ Change to make its filename match the existing one in this relative directory
 ```
 Note that the name eace57fae2d22ab50ab9bdeed7575b701d93794d5b3517c7805d6166c5eba67b_sk will be different.
 
-5. Run ``./start.sh`` to startup all.
+7. Run ``./start.sh`` to startup all.
 
 To stop it, run ``stop.sh``
 To completely remove all incriminating evidence of the network
