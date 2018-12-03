@@ -6,5 +6,4 @@ echo "${OUTPUT}"
 cd ../../../../
 cp .env_original .env
 echo "${OUTPUT}" >> .env
-cat .env
 
