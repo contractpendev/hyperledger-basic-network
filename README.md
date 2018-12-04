@@ -1,9 +1,36 @@
 ## Basic Network Config
 
-The goal of this project is to have a simple Hyperledger network working via docker based upon the basic network from [Basic Network](https://github.com/hyperledger/fabric-samples/tree/master/basic-network)
+The purpose of this project is to provide a easy way to run hyperledger fabric from docker.
+
+Based upon the basic network from [Basic Network](https://github.com/hyperledger/fabric-samples/tree/master/basic-network)
  AND with the Hyperledger Exploer added to the docker-compose.yml.
 
-Follow the startup steps at end of this document then open web browser to access ：http://localhost:8090/
+Follow the startup steps at end of this document then open web browser to see Hyperledger Explorer at this URL ：http://localhost:8090/
+
+I run this on a OSX Mac, but assume that it would also work on Linux.
+
+## To start
+
+1. Run ``./build.sh`` (if your on OSX Mac) to install tools for generate crypto material.
+2. Run ``./gen1.sh`` to generate the crypto materials.
+3. Run ``./gen2.sh`` to generate the channel crypto materials.
+4. Run ``./gen3.sh`` to generate environment variable which is used for docker-compose.
+5. Run ``./start.sh`` to start the docker containers running.
+6. Now http://localhost:8090/ to see Hyperledger explorer is running.
+
+## Creating card file and installing BNA
+
+The creation of the card file and the installation of BNA must happen from within the Docker file execution environment.
+
+1. ``docker exec -ti commandline /bin/bash``
+2. ``cd cli``
+3. ``./createcard.sh`` You will notice the PeerAdmin@hlfvv12.card file has been created
+4. ``./installbna.sh``
+5. ``./startbna.sh``
+
+## Notes
+
+Just for my notes the following changes.
 
 The files which were added when compared with basic-network were.
 
@@ -16,30 +43,10 @@ The files which were added when compared with basic-network were.
 4. config.json was added and this file gets added to blockchain-explorer.
 Its based upon https://github.com/hyperledger/blockchain-explorer/blob/master/examples/net1/config.json
 
-## To start
-
-1. Run ``./build.sh`` to install tools for generate crypto material.
-2. Create the file config.json file which came from  blockchain-explorer/examples/dockerConfig/config.json to match crypt-config.yaml and configtx.yaml
-3. Run ``./gen1.sh`` to generate the crypto materials.
-4. Run ``./gen2.sh`` to generate the channel crypto materials.
-5. Run ``./gen3.sh`` to generate environment variable which is used for docker-compose.
-6. DO NOT DO THIS STEP !!!! Edit the docker-compose.yml and edit line 18 which currently looks as follows
-
-export WHAT=$(ls ./crypto-config/peerOrganizations/org1.example.com/ca/*_sk)
-```
-- FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/eace57fae2d22ab50ab9bdeed7575b701d93794d5b3517c7805d6166c5eba67b_sk
-```
-Change to make its filename match the existing one in this relative directory 
-```
-./crypto-config/peerOrganizations/org1.example.com/ca/
-```
-Note that the name eace57fae2d22ab50ab9bdeed7575b701d93794d5b3517c7805d6166c5eba67b_sk will be different.
-
-7. Run ``./start.sh`` to startup all.
+5. Run ``./start.sh`` to startup all.
 
 To stop it, run ``stop.sh``
-To completely remove all incriminating evidence of the network
-on your system, run ``teardown.sh``.
+To completely remove all on your system, run ``teardown.sh``.
 
 ## Good articles
 
