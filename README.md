@@ -25,7 +25,7 @@ The creation of the card file and the installation of BNA must happen from withi
 7. ``docker exec -ti commandline /bin/bash``
 8. ``cd cli``
 9. ``./createcard.sh`` You will notice the PeerAdmin@hlfvv12.card file has been created
-10. ``./startbna1.sh`` Should start fabcar@0.0.1.bna but it is timeout, why? cannot connect? The second line in startbna1.sh fails with timeout.
+10. ``./startbna2.sh`` Starts the network.
 
 ## Notes
 
