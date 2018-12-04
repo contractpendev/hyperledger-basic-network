@@ -22,11 +22,10 @@ I run this on a OSX Mac, but assume that it would also work on Linux.
 
 The creation of the card file and the installation of BNA must happen from within the Docker file execution environment.
 
-1. ``docker exec -ti commandline /bin/bash``
-2. ``cd cli``
-3. ``./createcard.sh`` You will notice the PeerAdmin@hlfvv12.card file has been created
-4. ``./installbna.sh``
-5. ``./startbna.sh``
+7. ``docker exec -ti commandline /bin/bash``
+8. ``cd cli``
+9. ``./createcard.sh`` You will notice the PeerAdmin@hlfvv12.card file has been created
+10. ``./startbna1.sh`` Should start fabcar@0.0.1.bna but it is timeout, why? cannot connect? The second line in startbna1.sh fails with timeout.
 
 ## Notes
 
