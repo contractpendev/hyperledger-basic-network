@@ -1,0 +1,18 @@
+  version: '3'
+
+  networks:
+    basic:
+
+  services:    
+    commandline:
+      image: contractpen/commandline
+      command: sleep infinity
+      volumes:
+        - ./../cli/:/home/cli
+        - ./../config/:/home/config
+        - ./../crypto-config/:/home/crypto-config
+        - /Users/philipandrew/.composer/:/root/.composer
+      container_name: commandline
+      working_dir: /home
+      networks:
+        - basic
