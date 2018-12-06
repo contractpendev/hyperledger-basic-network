@@ -1,1 +1,1 @@
-docker build -t contractpen/commandline3 .
+docker build -t contractpen/commandline .

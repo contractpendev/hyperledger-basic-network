@@ -26,7 +26,8 @@ services:
       - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.example.com
     networks:
-      - basic
+#      - basic
+      - no-internet
 
   orderer.example.com:
     container_name: orderer.example.com
@@ -47,7 +48,8 @@ services:
         - ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
     networks:
-      - basic
+#      - basic
+      - no-internet
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
@@ -75,9 +77,9 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: peer node start
     # command: peer node start --peer-chaincodedev=true
-    ports:
-      - 7051:7051
-      - 7053:7053
+#    ports:
+#      - 7051:7051
+#      - 7053:7053
     volumes:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/msp/peer
@@ -88,6 +90,7 @@ services:
       - couchdb
     networks:
       - basic
+      - no-internet
 
   couchdb:
     container_name: couchdb
@@ -100,7 +103,8 @@ services:
 #    ports:
 #      - 5984:5984
     networks:
-      - basic
+#      - basic
+      - no-internet
 
   cli:
     container_name: cli
@@ -122,7 +126,8 @@ services:
         - ./chaincode/:/opt/gopath/src/github.com/chaincode/
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
     networks:
-        - basic
+#        - basic
+        - no-internet
     #depends_on:
     #  - orderer.example.com
     #  - peer0.org1.example.com
@@ -142,6 +147,7 @@ services:
 #      - "5422:5432"
     networks:
       - basic
+      - no-internet
 
   blockchain-explorer:
     container_name: blockchain-explorer
@@ -159,9 +165,10 @@ services:
       - "8090:8080"
     networks:
       - basic
+      - no-internet
 
-  commandline3:
-    image: contractpen/commandline3
+  commandline:
+    image: contractpen/commandline
     command: sleep infinity
     volumes:
     - ./nodejs/:/home/nodejs
@@ -169,16 +176,21 @@ services:
     - ./config/:/home/config
     - ./crypto-config/:/home/crypto-config
 #    - /Users/philipandrew/.composer/:/root/.composer
-    container_name: commandline3
+    container_name: commandline
     working_dir: /home
+    ports:
+      - "3000:3000"
     networks:
       - basic
+      - no-internet
 
-  playground:    
-    image: hyperledger/composer-playground
-    container_name: playground
-    networks:
-      - basic
+# Do I want playground?
+#  playground:    
+#    image: hyperledger/composer-playground
+#    container_name: playground
+#    networks:
+#      - basic
+#      - no-internet
 
 #peer chaincode install -n fabcar -v 1.0 -p . -l golang
 #peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabcar -l golang -v 1.0 -c '{"Args":[""]}' -P "OR ('Org1MSP.member','Org2MSP.member')"

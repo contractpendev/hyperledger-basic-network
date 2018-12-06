@@ -28,7 +28,7 @@ The creation of the card file and the installation of BNA must happen from withi
 10. ``./createcard.sh`` You will notice the PeerAdmin@hlfv12.card file has been created
 11. ``./startbna_helloworldstate.sh`` Starts the network and creates another card.
 12. ``./ping.sh`` Successfully pings the network.
-13. Now the goal is to have a REST server or NodeJS which can talk to the 
+13. ``./restserver.sh`` Starts composer rest server on port 3000.
 
 ## Notes
 
@@ -55,3 +55,8 @@ To completely remove all on your system, run ``teardown.sh``.
 https://topicfly.io/hyperledger-fabric-composer-swarm/
 
 https://console.cloud.google.com/marketplace/details/click-to-deploy-images/hyperledger-fabric-and-composer?pli=1
+
+## Tasks to do
+
+1. Try to make the number of ports open to public minimal and keep all private, identify the minimum private network settings that can be done.
+2. 
