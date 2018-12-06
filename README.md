@@ -22,10 +22,13 @@ I run this on a OSX Mac, but assume that it would also work on Linux.
 
 The creation of the card file and the installation of BNA must happen from within the Docker file execution environment.
 
-7. ``docker exec -ti commandline /bin/bash``
-8. ``cd cli``
-9. ``./createcard.sh`` You will notice the PeerAdmin@hlfvv12.card file has been created
-10. ``./startbna2.sh`` Starts the network.
+7. ``cd cli``
+8. ``./shell.sh``
+9. ``cd cli``
+10. ``./createcard.sh`` You will notice the PeerAdmin@hlfv12.card file has been created
+11. ``./startbna_helloworldstate.sh`` Starts the network and creates another card.
+12. ``./ping.sh`` Successfully pings the network.
+13. Now the goal is to have a REST server or NodeJS which can talk to the 
 
 ## Notes
 
