@@ -32,3 +32,14 @@ ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 # confirm installation
 RUN node -v
 RUN npm -v
+
+RUN apt-get update && apt-get install -y --no-install-recommends python3.5 python3-pip
+RUN apt-get install -y build-essential libssl-dev libffi-dev python-dev
+#RUN ln -s /usr/bin/python3 /usr/bin/python
+
+RUN npm config set unsafe-perm=true
+RUN npm install -g composer-rest-server
+RUN npm install -g composer-cli
+#RUN composer card import --file ./PeerAdmin@hlfv12.card
+
+
