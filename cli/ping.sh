@@ -1,2 +1,2 @@
-composer identity list -c PeerAdmin@helloworldstate
-composer network ping --card PeerAdmin@helloworldstate
+composer identity list -c admin@basic-sample-network
+composer network ping --card admin@basic-sample-network
