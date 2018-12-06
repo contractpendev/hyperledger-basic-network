@@ -54,3 +54,4 @@ To completely remove all on your system, run ``teardown.sh``.
 
 https://topicfly.io/hyperledger-fabric-composer-swarm/
 
+https://console.cloud.google.com/marketplace/details/click-to-deploy-images/hyperledger-fabric-and-composer?pli=1
