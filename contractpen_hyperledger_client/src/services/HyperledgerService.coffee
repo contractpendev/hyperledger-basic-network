@@ -16,9 +16,9 @@ class HyperledgerService
   start: () =>
     @opts.logger.log('info', 'Start of HyperledgerService')
     try
-      await execa('bash', [ './start_docker.sh' ],
+      x = await execa('bash', [ './start_docker.sh' ],
         cwd: process.cwd() + '/../'
-      ).stdout.pipe(process.stdout)  
+      )
     catch e 
       console.log e 
     #console.log stdout
