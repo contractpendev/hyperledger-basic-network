@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			".idea": true,
+			"node_modules": true,
+			"spec/**/*.js": true,
+			"spec/**/*.js.map": true,
+			"src/**/*.js": true,
+			"src/**/*.js.map": true
+		}
+	}
+}
