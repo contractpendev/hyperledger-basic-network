@@ -24,9 +24,9 @@ class HyperledgerService
       command = options.command
       if command == 'startInDocker'
         console.log 'start in docker'
-        x = await execa('./start_docker.sh',
-          cwd: process.cwd() + '/../'
-        )        
+        #x = await execa('./start_docker.sh',
+        #  cwd: process.cwd() + '/../'
+        #)        
       else if command == 'startOutsideDocker' 
         try
           b = await execa('./generate.sh',
