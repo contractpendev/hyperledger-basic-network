@@ -18,6 +18,7 @@
     "clear-module": "^3.0.0",
     "clusterws": "^3.2.0",
     "comedy": "^1.6.0",
+    "command-line-args": "^5.0.2",
     "cookie-parser": "^1.4.3",
     "execa": "^1.0.0",
     "express": "^4.16.4",
