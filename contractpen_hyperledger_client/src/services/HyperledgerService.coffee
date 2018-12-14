@@ -29,9 +29,6 @@ class HyperledgerService
         )        
       else if command == 'startOutsideDocker' 
         try
-          a = await execa('./clean.sh',
-            cwd: process.cwd() + '/../'
-          )
           b = await execa('./generate.sh',
             cwd: process.cwd() + '/../'
           )
