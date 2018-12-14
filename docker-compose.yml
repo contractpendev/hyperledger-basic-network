@@ -187,8 +187,8 @@ services:
 
   hyperledgerclient:
     image: contractpen/commandline
-    command: sleep infinity
-    #command: /bin/bash ./contractpen_hyperledger_client/run_in_docker.sh
+    #command: sleep infinity
+    command: /bin/bash ./contractpen_hyperledger_client/run_in_docker.sh
     volumes:
     - ./nodejs/:/home/nodejs
     - ./cli/:/home/cli
