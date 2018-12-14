@@ -40,4 +40,4 @@ docker-compose -f docker-compose.yml up -d cli
 
 docker-compose -f docker-compose.yml up -d commandline
 
-# docker-compose -f docker-compose.yml up -d hyperledgerclient
+docker-compose -f docker-compose.yml up -d hyperledgerclient

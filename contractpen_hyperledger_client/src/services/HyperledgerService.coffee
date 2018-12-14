@@ -24,11 +24,20 @@ class HyperledgerService
       command = options.command
       if command == 'startInDocker'
         console.log 'start in docker'
+        x = await execa('./start_docker.sh',
+          cwd: process.cwd() + '/../'
+        )        
       else if command == 'startOutsideDocker' 
         try
-          x = await execa('./start_docker.sh',
+          a = await execa('./clean.sh',
             cwd: process.cwd() + '/../'
           )
+          b = await execa('./generate.sh',
+            cwd: process.cwd() + '/../'
+          )
+          c = await execa('./start_docker.sh',
+            cwd: process.cwd() + '/../'
+          )          
         catch e 
           console.log e 
       else 
