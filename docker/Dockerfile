@@ -40,6 +40,11 @@ RUN apt-get install -y build-essential libssl-dev libffi-dev python-dev
 RUN npm config set unsafe-perm=true
 RUN npm install -g composer-rest-server
 RUN npm install -g composer-cli
+
+# Needed for reverse ssh tunnel code
+RUN apt-get install -y openssh-client
+RUN apt-get install -y sshpass
+
 #RUN composer card import --file ./PeerAdmin@hlfv12.card
 
 
