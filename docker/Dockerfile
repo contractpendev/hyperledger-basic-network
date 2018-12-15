@@ -42,6 +42,7 @@ RUN npm install -g composer-rest-server
 RUN npm install -g composer-cli
 
 # Needed for reverse ssh tunnel code
+RUN apt-get install -y apt-utils
 RUN apt-get install -y apt-transport-https
 RUN apt-get install -y openssh-client
 RUN apt-get install -y sshpass
