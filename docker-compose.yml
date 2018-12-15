@@ -164,7 +164,7 @@ services:
     ports:
       - "8090:8080"
     networks:
-#      - basic
+      - basic
       - no-internet
 
   commandline:

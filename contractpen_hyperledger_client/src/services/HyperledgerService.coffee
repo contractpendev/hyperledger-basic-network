@@ -25,15 +25,18 @@ class HyperledgerService
       if command == 'startInDocker'
         console.log 'start in docker'
         # ./createcard.sh
-        a = await execa('./createcard.sh',
-          cwd: process.cwd() + '/../cli/'
-        )        
-        b = await execa('./startbna_helloworldstate.sh',
-          cwd: process.cwd() + '/../cli/'
-        )        
-        c = await execa('./ping.sh',
-          cwd: process.cwd() + '/../cli/'
-        )        
+        try
+          a = await execa('./createcard.sh',
+            cwd: process.cwd() + '/../cli/'
+          )        
+          b = await execa('./startbna_helloworldstate.sh',
+            cwd: process.cwd() + '/../cli/'
+          )        
+          c = await execa('./ping.sh',
+            cwd: process.cwd() + '/../cli/'
+          )        
+        catch e 
+          console.log e 
       else if command == 'startOutsideDocker' 
         try
           b = await execa('./generate.sh',
