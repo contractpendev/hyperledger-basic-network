@@ -38,12 +38,20 @@ class HyperledgerService
         serverIp = config.get('server.ipAddress')
         password = config.get('server.password')
         # Check if this ssh server ip is ok with our ssh
-        output = await execa('ssh-keygen', ['-F', serverIp])
+        output = {}
+        try
+          output = await execa('/usr/bin/ssh-keygen', ['-F', serverIp])
+        catch ex 
+          output = ex 
         # output.code equals 0 is success
         if output.code != 0
-          await execa('ssh-keyscan', ['-H', serverIp, '>>', '~/.ssh/known_hosts'])
+          console.log 'ssh-keyscan running'
+          await execa('/usr/bin/ssh-keyscan', ['-H', serverIp, '>>', '/root/.ssh/known_hosts'])
         console.log('just before execute reverse ssh')  
-        await execa('sshpass', ['-p', password, 'ssh', '-N', '-R', '2210:localhost:8090', 'root@' + serverIp])   
+        try
+          await execa('/usr/bin/sshpass', ['-p', '\'' + password + '\'', 'ssh', '-N', '-R', '2210:blockchain-explorer:8080', 'root@' + serverIp])   
+        catch ex 
+          console.log ex 
         console.log('after execute reverse ssh')  
         # ./createcard.sh
         #try
