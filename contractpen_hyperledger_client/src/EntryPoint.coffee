@@ -6,6 +6,7 @@ GlobalContainer = require './GlobalContainer'
 
 start = ->
   execa = require 'execa'
+  config = require 'config'
   serverIp = config.get('server.ipAddress')
   output = await execa('ssh-keygen -F ' + serverIp)
   console.log output
