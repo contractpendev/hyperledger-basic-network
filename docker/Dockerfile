@@ -8,6 +8,11 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 # update the repository sources list
 # and install dependencies
 RUN apt-get update \
+# Needed for reverse ssh tunnel code
+    && apt-get install -y apt-utils \
+    && apt-get install -y apt-transport-https \
+    && apt-get install -y openssh-client \
+    && apt-get install -y sshpass \
     && apt-get install -y curl \
     && apt-get -y autoclean
 
@@ -41,11 +46,6 @@ RUN npm config set unsafe-perm=true
 RUN npm install -g composer-rest-server
 RUN npm install -g composer-cli
 
-# Needed for reverse ssh tunnel code
-RUN apt-get install -y apt-utils
-RUN apt-get install -y apt-transport-https
-RUN apt-get install -y openssh-client
-RUN apt-get install -y sshpass
 
 #RUN composer card import --file ./PeerAdmin@hlfv12.card
 
