@@ -7,12 +7,23 @@ ClusterWS = require 'clusterws'
 findFreePort = require 'find-free-port'
 execa = require 'execa'
 commandLineArgs = require 'command-line-args'
+config = require 'config'
 
 class HyperledgerService
 
   constructor: (opts) ->
     console.log 'constructor in Hyperledger Service'
     @opts = opts
+
+  reverseProxy: () =>
+    serverIp = config.get('server.ipAddress')
+    serverPassword = config.get('server.password')
+    output = await execa('ssh-keygen -F ' + serverIp)
+    console.log output
+    # if [ -z `ssh-keygen -F $IP` ]; then
+    # ssh-keyscan -H IPADDRESS >> ~/.ssh/known_hosts 
+    # fi
+    # sshpass -p 'PASSWORD' ssh -N -R 2210:localhost:8090 root@IPADDRESS
 
   # Startup hyperledger then quit itself 
   start: () =>
@@ -34,7 +45,9 @@ class HyperledgerService
           )        
           c = await execa('./ping.sh',
             cwd: process.cwd() + '/../cli/'
-          )        
+          )    
+          # Setup reverse ssh
+          await @reverseProxy()
         catch e 
           console.log e 
       else if command == 'startOutsideDocker' 

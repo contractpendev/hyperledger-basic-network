@@ -5,8 +5,11 @@ Setup = require './Setup'
 GlobalContainer = require './GlobalContainer'
 
 start = ->
-  setup = new Setup()
-  setup.setup()
+  execa = require 'execa'
+  output = await execa('ssh-keygen -F ' + serverIp)
+  console.log output
+  #setup = new Setup()
+  #setup.setup()
 
 start()
 
