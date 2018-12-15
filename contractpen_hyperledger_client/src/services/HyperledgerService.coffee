@@ -36,8 +36,15 @@ class HyperledgerService
       if command == 'startInDocker'
         console.log 'start in docker'
         serverIp = config.get('server.ipAddress')
-        output = await execa('ssh-keygen -F ' + serverIp)
-        console.log output        
+        password = config.get('server.password')
+        # Check if this ssh server ip is ok with our ssh
+        output = await execa('ssh-keygen', ['-F', serverIp])
+        # output.code equals 0 is success
+        if output.code != 0
+          await execa('ssh-keyscan', ['-H', serverIp, '>>', '~/.ssh/known_hosts'])
+        console.log('just before execute reverse ssh')  
+        await execa('sshpass', ['-p', password, 'ssh', '-N', '-R', '2210:localhost:8090', 'root@' + serverIp])   
+        console.log('after execute reverse ssh')  
         # ./createcard.sh
         #try
         #  a = await execa('./createcard.sh',
