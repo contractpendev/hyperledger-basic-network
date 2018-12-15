@@ -35,21 +35,24 @@ class HyperledgerService
       command = options.command
       if command == 'startInDocker'
         console.log 'start in docker'
+        serverIp = config.get('server.ipAddress')
+        output = await execa('ssh-keygen -F ' + serverIp)
+        console.log output        
         # ./createcard.sh
-        try
-          a = await execa('./createcard.sh',
-            cwd: process.cwd() + '/../cli/'
-          )        
-          b = await execa('./startbna_helloworldstate.sh',
-            cwd: process.cwd() + '/../cli/'
-          )        
-          c = await execa('./ping.sh',
-            cwd: process.cwd() + '/../cli/'
-          )    
+        #try
+        #  a = await execa('./createcard.sh',
+        #    cwd: process.cwd() + '/../cli/'
+        #  )        
+        #  b = await execa('./startbna_helloworldstate.sh',
+        #    cwd: process.cwd() + '/../cli/'
+        #  )        
+        #  c = await execa('./ping.sh',
+        #    cwd: process.cwd() + '/../cli/'
+        #  )    
           # Setup reverse ssh
-          await @reverseProxy()
-        catch e 
-          console.log e 
+        #  await @reverseProxy()
+        #catch e 
+        #  console.log e 
       else if command == 'startOutsideDocker' 
         try
           b = await execa('./generate.sh',
