@@ -46,7 +46,7 @@ RUN npm config set unsafe-perm=true
 RUN npm install -g composer-rest-server
 RUN npm install -g composer-cli
 
-RUN cd /root; mkdir .ssh; chmod 0700 .ssh; cd /root/.ssh; echo '' > known_hosts
+RUN cd /root; mkdir .ssh; cd /root/.ssh; echo '' > known_hosts
 
 #RUN composer card import --file ./PeerAdmin@hlfv12.card
 

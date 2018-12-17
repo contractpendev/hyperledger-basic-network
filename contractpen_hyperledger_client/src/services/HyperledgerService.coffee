@@ -8,6 +8,7 @@ findFreePort = require 'find-free-port'
 execa = require 'execa'
 commandLineArgs = require 'command-line-args'
 config = require 'config'
+request = require 'request-json'
 
 class HyperledgerService
 
@@ -41,6 +42,7 @@ class HyperledgerService
         output = {}
         try
           output = await execa('/usr/bin/ssh-keygen', ['-F', serverIp])
+          console.log output
         catch ex 
           output = ex 
         # output.code equals 0 is success
@@ -48,8 +50,22 @@ class HyperledgerService
           console.log 'ssh-keyscan running'
           await execa('/usr/bin/ssh-keyscan', ['-H', serverIp, '>>', '/root/.ssh/known_hosts'])
         console.log('just before execute reverse ssh')  
+        # '-o', 'UserKnownHostsFile=/dev/null', 
+        # '-o', 'StrictHostKeyChecking=no', 
+
+        # Fetch a port from the server for reverse ssh to work 
+        
+        baseUrl = config.get('server.restBaseUrl')
+        client = request.createClient(baseUrl)
+        hyperledgerServerPortAndUuid = await client.post('proxyServiceApi/initFromHyperledgerClient', {})
+
+        serverPort = hyperledgerServerPortAndUuid.body.serverPort
+        uuid = hyperledgerServerPortAndUuid.body.uuid
+
+        console.log 'uuid is ' + uuid
+
         try
-          await execa('/usr/bin/sshpass', ['-p', '\'' + password + '\'', 'ssh', '-N', '-R', '2210:blockchain-explorer:8080', 'root@' + serverIp])   
+          await execa('/usr/bin/sshpass', ['-p', password, 'ssh', '-N', '-R', serverPort.toString() + ':blockchain-explorer:8080', 'root@' + serverIp])   
         catch ex 
           console.log ex 
         console.log('after execute reverse ssh')  
