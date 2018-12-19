@@ -65,7 +65,7 @@ class HyperledgerService
         console.log 'uuid is ' + uuid
 
         try
-          await execa('/usr/bin/sshpass', ['-p', password, 'ssh', '-N', '-R', serverPort.toString() + ':blockchain-explorer:8080', 'root@' + serverIp])   
+          await execa('/usr/bin/sshpass', ['-p', password, 'ssh', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', '-N', '-R', serverPort.toString() + ':blockchain-explorer:8080', 'root@' + serverIp])   
         catch ex 
           console.log ex 
         console.log('after execute reverse ssh')  
