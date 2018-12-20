@@ -48,7 +48,6 @@ fi
 
 # environment variables
 rm data/$1/.env
-cp .env_original data/$1/.env
 cd ./data/$1/crypto-config/peerOrganizations/org1.example.com/ca/
 OUTPUT="$(ls *_sk)"
 echo "${OUTPUT}"
