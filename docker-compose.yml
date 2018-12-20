@@ -186,11 +186,11 @@ services:
     image: contractpen/commandline
     command: sleep infinity
     volumes:
-    - ./nodejs/:/home/nodejs
-    - ./cli/:/home/cli
+    - ./../../nodejs/:/home/nodejs
+    - ./../../cli/:/home/cli
     - ./config/:/home/config
     - ./crypto-config/:/home/crypto-config
-    - ./contractpen_hyperledger_client/:/home/contractpen_hyperledger_client
+    - ./../../contractpen_hyperledger_client/:/home/contractpen_hyperledger_client
 #    - /Users/philipandrew/.composer/:/root/.composer
     container_name: ${COMPOSE_PROJECT_NAME}.commandline
     working_dir: /home
