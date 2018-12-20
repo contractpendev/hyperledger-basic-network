@@ -54,6 +54,6 @@ OUTPUT="$(ls *_sk)"
 echo "${OUTPUT}"
 cd ../../../../
 cp data/$1/.env_original data/$1/.env
-echo "${OUTPUT}" >> .env
+echo "${OUTPUT}" >> data/$1/.env
 
 
