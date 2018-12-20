@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
-export FABRIC_CFG_PATH=${PWD}
+export FABRIC_CFG_PATH=${PWD}/data/$1
 CHANNEL_NAME=mychannel
 
 # remove previous crypto material and config transactions
@@ -15,6 +15,13 @@ rm -fr data/$1/crypto-config/*
 mkdir data/$1/config
 mkdir data/$1/crypto-config
 
+cp configtx.yaml ./data/$1/
+cp crypto-config.yaml ./data/$1/
+cp config.json ./data/$1/
+
+# cd data/test
+# cryptogen generate --config=./crypto-config.yaml
+
 # generate crypto material
 cryptogen generate --config=./crypto-config.yaml --output=./data/$1/crypto-config
 if [ "$?" -ne 0 ]; then
@@ -23,6 +30,8 @@ if [ "$?" -ne 0 ]; then
 fi
 
 # generate genesis block for orderer
+#configtxgen -profile OneOrgOrdererGenesis -outputBlock ./data/test/config/genesis.block
+#export FABRIC_CFG_PATH=/home/philip/hyperledger-basic-network
 configtxgen -profile OneOrgOrdererGenesis -outputBlock ./data/$1/config/genesis.block
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate orderer genesis block..."
