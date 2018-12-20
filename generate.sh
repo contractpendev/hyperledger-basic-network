@@ -46,13 +46,15 @@ if [ "$?" -ne 0 ]; then
   exit 1
 fi
 
+cp .env_original data/$1/.env
+
 # enviroment variabvles
-rm .env
-cd ./data/$1/crypto-config/peerOrganizations/org1.example.com/ca/
-OUTPUT="$(ls *_sk)"
-echo "${OUTPUT}"
-cd ../../../../
-cp .env_original .env
-echo "${OUTPUT}" >> .env
+#rm .env
+#cd ./data/$1/crypto-config/peerOrganizations/org1.example.com/ca/
+#OUTPUT="$(ls *_sk)"
+#echo "${OUTPUT}"
+#cd ../../../../
+#cp .env_original .env
+#echo "${OUTPUT}" >> .env
 
 
