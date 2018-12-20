@@ -19,7 +19,7 @@ export MSYS_NO_PATHCONV=1
 #mkdir data/$1/config
 #mkdir data/$1/crypto-config
 
-docker-compose -p $1 -f docker-compose.yml up -d ca.example.com orderer.example.com peer0.org1.example.com couchdb blockchain-explorer-db
+docker-compose -f docker-compose.yml up -d ca.example.com orderer.example.com peer0.org1.example.com couchdb blockchain-explorer-db
 #docker-compose --env-file=data/test/.env -p test -f docker-compose.yml up ca.example.com
 echo 'Sleeping for 10 seconds, please wait'
 sleep 10s
