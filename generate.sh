@@ -11,7 +11,9 @@ CHANNEL_NAME=mychannel
 # remove previous crypto material and config transactions
 rm -fr data/$1/config/*
 rm -fr data/$1/crypto-config/*
+rm -fr data/$1
 
+mkdir data/$1
 mkdir data/$1/config
 mkdir data/$1/crypto-config
 
