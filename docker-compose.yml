@@ -87,8 +87,8 @@ services:
         - ./data/${COMPOSE_PROJECT_NAME}/crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
         - ./data/${COMPOSE_PROJECT_NAME}/config:/etc/hyperledger/configtx
     depends_on:
-      - ${COMPOSE_PROJECT_NAME}.orderer.example.com
-      - ${COMPOSE_PROJECT_NAME}.couchdb
+      - orderer.example.com
+      - couchdb
     networks:
       - ${COMPOSE_PROJECT_NAME}.basic
       - ${COMPOSE_PROJECT_NAME}.no-internet
