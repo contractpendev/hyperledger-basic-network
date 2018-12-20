@@ -55,4 +55,6 @@ cd ../../../../../../
 cp .env_original data/$1/.env
 echo "${OUTPUT}" >> data/$1/.env
 
+cp docker-compose.yml data/$1
+
 

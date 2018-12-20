@@ -29,13 +29,15 @@ class HyperledgerService
   # Startup hyperledger then quit itself 
   start: () =>
     optionDefinitions = [
-      { name: 'command', defaultOption: true }
+      { name: 'command', defaultOption: true },
+      { name: 'name', alias: 'n', type: String }
     ]
     try
       options = commandLineArgs(optionDefinitions)
       command = options.command
       if command == 'startInDocker'
         console.log 'start in docker'
+        console.log 'project name is :' + options.name + ':'
         serverIp = config.get('server.ipAddress')
         password = config.get('server.password')
         # Check if this ssh server ip is ok with our ssh
@@ -85,11 +87,12 @@ class HyperledgerService
         #catch e 
         #  console.log e 
       else if command == 'startOutsideDocker' 
+        console.log 'project name is :' + options.name + ':'
         try
-          b = await execa('./generate.sh',
+          b = await execa('./generate.sh', [options.name],
             cwd: process.cwd() + '/../'
           )
-          c = await execa('./start_docker.sh',
+          c = await execa('./start_docker.sh', [options.name],
             cwd: process.cwd() + '/../'
           )          
         catch e 
