@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
-export FABRIC_CFG_PATH=${PWD}/data/$1
+export FABRIC_CFG_PATH=${PWD}/data/$1/
 CHANNEL_NAME=mychannel
 
 # remove previous crypto material and config transactions
