@@ -56,7 +56,7 @@ echo "${OUTPUT}"
 cd ../../../../../../
 cp .env_original data/$1/.env
 echo "COMPOSE_PROJECT_NAME={$1}\n" > data/$1/.env
-echo "FABRIC_SERVER_CERTIFICATE_FILE=${OUTPUT}\n" > data/$1/.env
+echo "FABRIC_SERVER_CERTIFICATE_FILE=${OUTPUT}\n" >> data/$1/.env
 
 cp docker-compose.yml data/$1
 
