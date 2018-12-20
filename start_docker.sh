@@ -5,14 +5,19 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 # Exit on first error, print all commands.
+#
+# $1 is the project name
 set -ev
 
 # don't rewrite paths for Windows Git Bash users
 export MSYS_NO_PATHCONV=1
 
-docker-compose -f docker-compose.yml down
+#docker-compose -f docker-compose.yml down
+mkdir data/$1
+mkdir data/$1/config
+mkdir data/$1/crypto-config
 
-docker-compose -f docker-compose.yml up -d ca.example.com orderer.example.com peer0.org1.example.com couchdb blockchain-explorer-db
+docker-compose -p $1 -f docker-compose.yml up -d ca.example.com orderer.example.com peer0.org1.example.com couchdb blockchain-explorer-db
 
 echo 'Sleeping for 10 seconds, please wait'
 sleep 10s
@@ -35,9 +40,9 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/h
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" peer0.org1.example.com peer channel list
 # peer channel list
 
-docker-compose -f docker-compose.yml up -d blockchain-explorer
-docker-compose -f docker-compose.yml up -d cli
+docker-compose -p $1 -f docker-compose.yml up -d blockchain-explorer
+docker-compose -p $1 -f docker-compose.yml up -d cli
 
-docker-compose -f docker-compose.yml up -d commandline
+docker-compose -p $1 -f docker-compose.yml up -d commandline
 
-docker-compose -f docker-compose.yml up -d hyperledgerclient
+docker-compose -p $1 -f docker-compose.yml up -d hyperledgerclient
