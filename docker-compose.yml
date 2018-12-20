@@ -27,7 +27,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}.ca.example.com
     networks:
 #      - basic
-      - no-internet
+      no-internet:
         aliases:
          - ca.example.com
 
@@ -51,7 +51,7 @@ services:
         - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
     networks:
 #      - basic
-      - no-internet
+      no-internet:
         aliases:
          - orderer.example.com
 
@@ -95,7 +95,7 @@ services:
       - couchdb
     networks:
       - basic
-      - no-internet
+      no-internet:
         aliases:
          - peer0.org1.example.com
 
@@ -111,7 +111,7 @@ services:
 #      - 5984:5984
     networks:
 #      - basic
-      - no-internet
+      no-internet:
         aliases:
          - couchdb
 
@@ -136,7 +136,7 @@ services:
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
     networks:
 #        - basic
-        - no-internet
+      no-internet:
           aliases:
            - cli
     #depends_on:
@@ -158,7 +158,7 @@ services:
 #      - "5422:5432"
     networks:
 #      - basic
-      - no-internet
+      no-internet:
         aliases:
          - blockchain-explorer-db
          
@@ -178,7 +178,7 @@ services:
       - "8090:8080"
     networks:
       - basic
-      - no-internet
+      no-internet:
         aliases:
          - blockchain-explorer
          
@@ -198,7 +198,7 @@ services:
       - "3000:3000"
     networks:
       - basic
-      - no-internet
+      no-internet:
         aliases:
          - commandline
          
@@ -218,7 +218,7 @@ services:
       - "3001:3001"
     networks:
       - basic
-      - no-internet
+      no-internet:
         aliases:
          - hyperledgerclient
          
