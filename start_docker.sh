@@ -9,7 +9,7 @@
 # $1 is the project name
 cd data/$1
 set -ev
-cd ..
+cd ../..
 
 # don't rewrite paths for Windows Git Bash users
 export MSYS_NO_PATHCONV=1
