@@ -26,7 +26,7 @@ docker-compose -f docker-compose.yml up -d ca.example.com orderer.example.com pe
 echo 'Sleeping for 10 seconds, please wait'
 sleep 10s
 
-docker exec -i "{$1}.blockchain-explorer-db" bash /opt/createdb.sh
+docker exec -i "$1.blockchain-explorer-db" bash /opt/createdb.sh
 
 # docker-compose -f docker-compose.yml up -d hyperledger-explorer
 
