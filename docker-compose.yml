@@ -49,7 +49,7 @@ services:
         - ./data/${COMPOSE_PROJECT_NAME}/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
     networks:
 #      - basic
-      - ${COMPOSE_PROJECT_NAME}.no-internet
+      - no-internet
 
   peer0.org1.example.com:
     container_name: ${COMPOSE_PROJECT_NAME}.peer0.org1.example.com
