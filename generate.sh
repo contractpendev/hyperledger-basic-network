@@ -16,7 +16,7 @@ mkdir data/$1/config
 mkdir data/$1/crypto-config
 
 # generate crypto material
-cryptogen generate --config=./data/$1/crypto-config.yaml
+cryptogen generate --config=./crypto-config.yaml
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate crypto material..."
   exit 1
