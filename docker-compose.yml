@@ -143,7 +143,7 @@ services:
       - DATABASE_USERNAME=hppoc
       - DATABASE_PASSWORD=password
     volumes:
-        - ./postgreSQLdb/:/opt/
+        - ./../../postgreSQLdb/:/opt/
 #    ports:
 #      - "5422:5432"
     networks:
