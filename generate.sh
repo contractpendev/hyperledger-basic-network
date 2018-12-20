@@ -15,9 +15,8 @@ rm -fr data/$1/crypto-config/*
 mkdir data/$1/config
 mkdir data/$1/crypto-config
 
-cp configtx.yaml ./data/$1/configtx.yaml
-cp crypto-config.yaml ./data/$1/crypto-config.yaml
-cp config.json ./data/$1/config.json
+cp *.yaml data/$1
+cp config.json data/$1/config.json
 
 # generate crypto material
 cryptogen generate --config=./crypto-config.yaml --output=./data/$1/crypto-config
