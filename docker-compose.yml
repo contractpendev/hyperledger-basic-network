@@ -94,7 +94,7 @@ services:
       - orderer.example.com
       - couchdb
     networks:
-      - basic
+      basic:
       no-internet:
         aliases:
          - peer0.org1.example.com
@@ -177,7 +177,7 @@ services:
     ports:
       - "8090:8080"
     networks:
-      - basic
+      basic:
       no-internet:
         aliases:
          - blockchain-explorer
@@ -197,7 +197,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - basic
+      basic:
       no-internet:
         aliases:
          - commandline
@@ -217,7 +217,7 @@ services:
     ports:
       - "3001:3001"
     networks:
-      - basic
+      basic:
       no-internet:
         aliases:
          - hyperledgerclient
