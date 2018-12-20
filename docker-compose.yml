@@ -27,7 +27,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}.ca.example.com
     networks:
 #      - basic
-      - ${COMPOSE_PROJECT_NAME}.no-internet
+      - no-internet
 
   orderer.example.com:
     container_name: ${COMPOSE_PROJECT_NAME}.orderer.example.com
@@ -90,8 +90,8 @@ services:
       - orderer.example.com
       - couchdb
     networks:
-      - ${COMPOSE_PROJECT_NAME}.basic
-      - ${COMPOSE_PROJECT_NAME}.no-internet
+      - basic
+      - no-internet
 
   couchdb:
     container_name: ${COMPOSE_PROJECT_NAME}.couchdb
@@ -105,7 +105,7 @@ services:
 #      - 5984:5984
     networks:
 #      - basic
-      - ${COMPOSE_PROJECT_NAME}.no-internet
+      - no-internet
 
   cli:
     container_name: ${COMPOSE_PROJECT_NAME}.cli
@@ -128,7 +128,7 @@ services:
         - ./data/${COMPOSE_PROJECT_NAME}/crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
     networks:
 #        - basic
-        - ${COMPOSE_PROJECT_NAME}.no-internet
+        - no-internet
     #depends_on:
     #  - orderer.example.com
     #  - peer0.org1.example.com
@@ -148,7 +148,7 @@ services:
 #      - "5422:5432"
     networks:
 #      - basic
-      - ${COMPOSE_PROJECT_NAME}.no-internet
+      - no-internet
 
   blockchain-explorer:
     container_name: ${COMPOSE_PROJECT_NAME}.blockchain-explorer
@@ -165,8 +165,8 @@ services:
     ports:
       - "8090:8080"
     networks:
-      - ${COMPOSE_PROJECT_NAME}.basic
-      - ${COMPOSE_PROJECT_NAME}.no-internet
+      - basic
+      - no-internet
 
   commandline:
     image: contractpen/commandline
@@ -183,8 +183,8 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - ${COMPOSE_PROJECT_NAME}.basic
-      - ${COMPOSE_PROJECT_NAME}.no-internet
+      - basic
+      - no-internet
 
   hyperledgerclient:
     image: contractpen/commandline
@@ -201,8 +201,8 @@ services:
     ports:
       - "3001:3001"
     networks:
-      - ${COMPOSE_PROJECT_NAME}.basic
-      - ${COMPOSE_PROJECT_NAME}.no-internet
+      - basic
+      - no-internet
 
 
 
