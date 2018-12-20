@@ -28,6 +28,8 @@ services:
     networks:
 #      - basic
       - no-internet
+        aliases:
+         - ca.example.com
 
   orderer.example.com:
     container_name: ${COMPOSE_PROJECT_NAME}.orderer.example.com
@@ -50,6 +52,8 @@ services:
     networks:
 #      - basic
       - no-internet
+        aliases:
+         - orderer.example.com
 
   peer0.org1.example.com:
     container_name: ${COMPOSE_PROJECT_NAME}.peer0.org1.example.com
@@ -92,6 +96,8 @@ services:
     networks:
       - basic
       - no-internet
+        aliases:
+         - peer0.org1.example.com
 
   couchdb:
     container_name: ${COMPOSE_PROJECT_NAME}.couchdb
@@ -106,6 +112,8 @@ services:
     networks:
 #      - basic
       - no-internet
+        aliases:
+         - couchdb
 
   cli:
     container_name: ${COMPOSE_PROJECT_NAME}.cli
@@ -129,6 +137,8 @@ services:
     networks:
 #        - basic
         - no-internet
+          aliases:
+           - cli
     #depends_on:
     #  - orderer.example.com
     #  - peer0.org1.example.com
@@ -149,7 +159,9 @@ services:
     networks:
 #      - basic
       - no-internet
-
+        aliases:
+         - blockchain-explorer-db
+         
   blockchain-explorer:
     container_name: ${COMPOSE_PROJECT_NAME}.blockchain-explorer
     image: hyperledger/explorer
@@ -167,7 +179,9 @@ services:
     networks:
       - basic
       - no-internet
-
+        aliases:
+         - blockchain-explorer
+         
   commandline:
     image: contractpen/commandline
     command: sleep infinity
@@ -185,7 +199,9 @@ services:
     networks:
       - basic
       - no-internet
-
+        aliases:
+         - commandline
+         
   hyperledgerclient:
     image: contractpen/commandline
     command: /bin/bash ./contractpen_hyperledger_client/run_in_docker.sh
@@ -203,7 +219,9 @@ services:
     networks:
       - basic
       - no-internet
-
+        aliases:
+         - hyperledgerclient
+         
 
 
 # Do I want playground?
