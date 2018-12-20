@@ -53,7 +53,7 @@ cd ./data/$1/crypto-config/peerOrganizations/org1.example.com/ca/
 OUTPUT="$(ls *_sk)"
 echo "${OUTPUT}"
 cd ../../../../../../
-cp data/$1/.env_original data/$1/.env
+cp .env_original data/$1/.env
 echo "${OUTPUT}" >> data/$1/.env
 
 
