@@ -42,10 +42,15 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/h
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" $1.peer0.org1.example.com peer channel join -b mychannel.block
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" $1.peer0.org1.example.com peer channel list
 # peer channel list
+sleep ${FABRIC_START_TIMEOUT}
 
-docker-compose -p $1 -f docker-compose.yml up -d blockchain-explorer
-docker-compose -p $1 -f docker-compose.yml up -d cli
+docker-compose -f docker-compose.yml up -d blockchain-explorer
+docker-compose -f docker-compose.yml up -d cli
 
-docker-compose -p $1 -f docker-compose.yml up -d commandline
+docker-compose -f docker-compose.yml up -d commandline
 
-docker-compose -p $1 -f docker-compose.yml up -d hyperledgerclient
+docker-compose -f docker-compose.yml up -d hyperledgerclient
+
+echo 'finished'
+
+
