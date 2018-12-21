@@ -215,6 +215,7 @@ services:
     ports:
       - "3001:3001"
     networks:
+      basic:
       no-internet:
         aliases:
          - hyperledgerclient
