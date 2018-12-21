@@ -212,8 +212,6 @@ services:
 #    - /Users/philipandrew/.composer/:/root/.composer
     container_name: ${COMPOSE_PROJECT_NAME}.hyperledgerclient
     working_dir: /home
-    ports:
-      - "3001:3001"
     networks:
       basic:
       no-internet:
