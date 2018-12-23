@@ -45,6 +45,7 @@ class HyperledgerService
   sendPing: () =>
     ping =
       command: 'ping'
+      secretKey: @secretKey
     @ws.send JSON.stringify(ping)
     setTimeout (@sendPing
     ), (10*1000)
@@ -63,21 +64,14 @@ class HyperledgerService
       data =
         command: 'listenForCommands'
         uuid: @uuid
+        secretKey: @secretKey
       dataJson = JSON.stringify(data) 
-      console.log 'before send' 
       @ws.send dataJson
-      console.log 'after send' 
       setTimeout (@sendPing
       ), (10*1000)
       return
     @ws.on 'message', (data) =>
-      console.log 'websocket message from server'
-      console.log data
-      console.log ''
       dataJson = JSON.parse(data)
-      console.log dataJson
-      if dataJson.command == 'pong'
-        console.log 'ping ok'
       if dataJson.command == 'listenForCommandsResult'
         baseUrl = config.get('server.restBaseUrl')
         client = request.createClient(baseUrl)
@@ -87,8 +81,6 @@ class HyperledgerService
         )
       if dataJson.command == 'startHyperledgerInstance'  
         name = dataJson.hyperledgerName
-        console.log 'name to start'
-        console.log name
         # Start it
         # Once started then store the name and tell server it is started
         await @startHyperledgerInstance name
@@ -105,8 +97,6 @@ class HyperledgerService
       options = commandLineArgs(optionDefinitions)
       command = options.command
       if command == 'startInDocker'
-        console.log 'start in docker'
-        console.log 'project name is :' + options.name + ':'
         serverIp = config.get('server.ipAddress')
         password = config.get('server.password')
         # Check if this ssh server ip is ok with our ssh
@@ -128,7 +118,9 @@ class HyperledgerService
         
         baseUrl = config.get('server.restBaseUrl')
         client = request.createClient(baseUrl)
-        hyperledgerServerPortAndUuid = await client.post('proxyServiceApi/initFromHyperledgerClient', {})
+        hyperledgerServerPortAndUuid = await client.post('proxyServiceApi/initFromHyperledgerClient', {
+          secretKey: @secretKey
+        })
 
         serverPort = hyperledgerServerPortAndUuid.body.serverPort
         uuid = hyperledgerServerPortAndUuid.body.uuid
