@@ -18,6 +18,7 @@ class HyperledgerService
     console.log 'constructor in Hyperledger Service'
     @opts = opts
     @uuid = uuidv4()
+    @secretKey = config.get('server.secretKey')
 
   reverseProxy: () =>
     serverIp = config.get('server.ipAddress')
@@ -29,6 +30,25 @@ class HyperledgerService
     # fi
     # sshpass -p 'PASSWORD' ssh -N -R 2210:localhost:8090 root@IPADDRESS
 
+  startHyperledgerInstance: (name) =>
+    console.log 'we are outside docker and going to start instance by name'  
+    try
+      b = await execa('./generate.sh', [name],
+        cwd: process.cwd() + '/../'
+      )
+      c = await execa('./start_docker.sh', [name],
+        cwd: process.cwd() + '/../'
+      )          
+    catch e 
+      console.log e 
+
+  sendPing: () =>
+    ping =
+      command: 'ping'
+    @ws.send JSON.stringify(ping)
+    setTimeout (@sendPing
+    ), (10*1000)
+
   startServer: () =>
     console.log 'start server'
     websocketBaseUrl = config.get('server.websocketBaseUrl')
@@ -37,6 +57,8 @@ class HyperledgerService
     # Submit uuid to the pubsub server to listen for commands
     @ws = new WebSocket(websocketBaseUrl + 'echo')
     console.log 'just before...'
+    @ws.on 'close', =>
+      console.log 'the websocket closed, why?'
     @ws.on 'open', =>
       data =
         command: 'listenForCommands'
@@ -45,14 +67,32 @@ class HyperledgerService
       console.log 'before send' 
       @ws.send dataJson
       console.log 'after send' 
+      setTimeout (@sendPing
+      ), (10*1000)
       return
     @ws.on 'message', (data) =>
+      console.log 'websocket message from server'
+      console.log data
+      console.log ''
       dataJson = JSON.parse(data)
       console.log dataJson
+      if dataJson.command == 'pong'
+        console.log 'ping ok'
       if dataJson.command == 'listenForCommandsResult'
         baseUrl = config.get('server.restBaseUrl')
         client = request.createClient(baseUrl)
-        await client.post('proxyServiceApi/hyperledgerClientAwaitingCommands', {uuid: @uuid})
+        await client.post('proxyServiceApi/hyperledgerClientAwaitingCommands', 
+          secretKey: @secretKey
+          uuid: @uuid
+        )
+      if dataJson.command == 'startHyperledgerInstance'  
+        name = dataJson.hyperledgerName
+        console.log 'name to start'
+        console.log name
+        # Start it
+        # Once started then store the name and tell server it is started
+        await @startHyperledgerInstance name
+
       return
 
   # Startup hyperledger then quit itself 
@@ -118,15 +158,7 @@ class HyperledgerService
       else if command == 'startOutsideDocker' 
         if options.name
           console.log 'project name is :' + options.name + ':'
-          try
-            b = await execa('./generate.sh', [options.name],
-              cwd: process.cwd() + '/../'
-            )
-            c = await execa('./start_docker.sh', [options.name],
-              cwd: process.cwd() + '/../'
-            )          
-          catch e 
-            console.log e 
+          @startHyperledgerInstance options.name
         else 
           console.log 'starting as a server'   
           @startServer()
