@@ -202,7 +202,7 @@ services:
          
   hyperledgerclient:
     image: contractpen/commandline
-    command: /bin/bash ./contractpen_hyperledger_client/run_in_docker.sh
+    command: /bin/bash ./contractpen_hyperledger_client/run_in_docker.sh ${COMPOSE_PROJECT_NAME}
     volumes:
     - ./../../nodejs/:/home/nodejs
     - ./../../cli/:/home/cli

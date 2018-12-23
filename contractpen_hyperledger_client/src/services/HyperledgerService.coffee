@@ -95,6 +95,9 @@ class HyperledgerService
     ]
     try
       options = commandLineArgs(optionDefinitions)
+      console.log 'options are'
+      console.log options
+      console.log ''
       command = options.command
       if command == 'startInDocker'
         serverIp = config.get('server.ipAddress')
@@ -119,6 +122,7 @@ class HyperledgerService
         baseUrl = config.get('server.restBaseUrl')
         client = request.createClient(baseUrl)
         hyperledgerServerPortAndUuid = await client.post('proxyServiceApi/initFromHyperledgerClient', {
+          name: options.name
           secretKey: @secretKey
         })
 
