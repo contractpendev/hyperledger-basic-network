@@ -81,6 +81,12 @@ class HyperledgerService
         )
       if dataJson.command == 'startHyperledgerInstance'  
         name = dataJson.hyperledgerName
+        baseUrl = config.get('server.restBaseUrl')
+        client = request.createClient(baseUrl)        
+        await client.post('proxyServiceApi/attemptingToStartHyperledgerClient', 
+          secretKey: @secretKey
+          hyperledgerName: name
+        )      
         # Start it
         # Once started then store the name and tell server it is started
         await @startHyperledgerInstance name
@@ -130,6 +136,14 @@ class HyperledgerService
         uuid = hyperledgerServerPortAndUuid.body.uuid
 
         console.log 'uuid is ' + uuid
+
+        # Lets assume the next command will work successfully, so then we should tell server we have started
+        resultOfStart = await client.post('proxyServiceApi/finishSetupHyperledgerClient', {
+          name: options.name
+          uuid: uuid
+          serverPort: serverPort
+          secretKey: @secretKey
+        })
 
         try
           await execa('/usr/bin/sshpass', ['-p', password, 'ssh', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', '-N', '-R', serverPort.toString() + ':blockchain-explorer:8080', 'root@' + serverIp])   
