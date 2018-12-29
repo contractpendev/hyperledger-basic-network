@@ -1,4 +1,5 @@
 
+config/default.json
 combined.log
 application.log
 *compiled.js
