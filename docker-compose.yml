@@ -7,8 +7,9 @@ version: '3'
 
 networks:
   basic:
+    driver: overlay
   no-internet:
-    driver: bridge
+    driver: overlay
     internal: true
 
 services:

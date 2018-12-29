@@ -31,7 +31,7 @@ class HyperledgerService
     # sshpass -p 'PASSWORD' ssh -N -R 2210:localhost:8090 root@IPADDRESS
 
   startHyperledgerInstance: (name) =>
-    console.log 'we are outside docker and going to start instance by name'  
+    console.log 'we are outside docker and going to start instance by name for name :' + name + ':'  
     try
       b = await execa('./generate.sh', [name],
         cwd: process.cwd() + '/../'
@@ -41,6 +41,8 @@ class HyperledgerService
       )          
     catch e 
       console.log e 
+
+      
 
   sendPing: () =>
     ping =
@@ -90,6 +92,30 @@ class HyperledgerService
         # Start it
         # Once started then store the name and tell server it is started
         await @startHyperledgerInstance name
+      if dataJson.command == 'startMultipleHyperledgerInstances'  
+        total = dataJson.total
+
+        numbers = [1..total]
+
+        names = numbers.map((n) ->
+          'hyperledger-' + uuidv4()
+        )
+        console.log names
+
+        # Here create total names in an array and then send that to the server and attempt to start them 
+        baseUrl = config.get('server.restBaseUrl')
+        client = request.createClient(baseUrl)        
+ 
+        # Start it
+        # Once started then store the name and tell server it is started
+        for name in names
+          console.log 'Attempting to start hyperledger with name :' + name + ':'
+          await client.post('proxyServiceApi/attemptingToStartHyperledgerClient', 
+            secretKey: @secretKey
+            hyperledgerName: name
+          )      
+          await @startHyperledgerInstance name
+          console.log 'finished start hyperledger :' + name + ':'
 
       return
 
