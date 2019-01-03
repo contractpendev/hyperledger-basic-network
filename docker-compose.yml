@@ -96,6 +96,7 @@ services:
       - couchdb
     networks:
       basic:
+      no-internet:
         aliases:
          - peer0.org1.example.com
 
