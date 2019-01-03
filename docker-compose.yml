@@ -95,7 +95,7 @@ services:
       - orderer.example.com
       - couchdb
     networks:
-      no-internet:
+      basic:
         aliases:
          - peer0.org1.example.com
 
