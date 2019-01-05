@@ -74,6 +74,11 @@ class HyperledgerService
       return
     @ws.on 'message', (data) =>
       dataJson = JSON.parse(data)
+      if dataJson.command == 'deployBnaToHyperledgerInstance'
+        console.log ''
+        console.log ''
+        console.log dataJson.command
+        console.log ''
       if dataJson.command == 'listenForCommandsResult'
         baseUrl = config.get('server.restBaseUrl')
         client = request.createClient(baseUrl)
