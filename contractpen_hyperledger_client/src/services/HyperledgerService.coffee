@@ -48,6 +48,7 @@ class HyperledgerService
     ping =
       command: 'ping'
       secretKey: @secretKey
+    console.log 'sendPing'  
     @ws.send JSON.stringify(ping)
     setTimeout (@sendPing
     ), (10*1000)
@@ -75,6 +76,8 @@ class HyperledgerService
       return
     @ws.on 'message', (data) =>
       dataJson = JSON.parse(data)
+      console.log 'websocket message from server is'
+      console.log dataJson
       if dataJson.command == 'deployBnaToHyperledgerInstance'
         console.log ''
         console.log ''
