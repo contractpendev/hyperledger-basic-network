@@ -205,7 +205,7 @@ services:
          
   hyperledgerclient:
     image: contractpen/commandline
-    command: /bin/bash ./contractpen_hyperledger_client/run_in_docker.sh ${COMPOSE_PROJECT_NAME}
+    command: /bin/bash ./contractpen_hyperledger_client/run_in_docker.sh ${COMPOSE_PROJECT_NAME} ${COMPOSE_CONTROLLER_UUID}
     volumes:
     - ./../../nodejs/:/home/nodejs
     - ./../../cli/:/home/cli
