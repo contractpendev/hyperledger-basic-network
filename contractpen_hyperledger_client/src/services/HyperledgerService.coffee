@@ -11,6 +11,7 @@ config = require 'config'
 request = require 'request-json'
 WebSocket = require('ws')
 uuidv4 = require 'uuid/v4'
+download = require 'download'
 
 class HyperledgerService
 
@@ -86,6 +87,10 @@ class HyperledgerService
         console.log 'command is ' + dataJson.command
         console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
         console.log 'the filename is ' + dataJson.bnaFileName
+        # archive_0f0ec513-daba-42e5-8ec5-13daba62e5c4.bna
+        downloadUrl = 'https://contractpen.com/file/download/accordZip?file=' + dataJson.bnaFileName
+        bnaDest = './data/' + name + '/bna/' + dataJson.bnaFileName
+        await download(downloadUrl).pipe(fs.createWriteStream(bnaDest))
         console.log 'then to execute a shell script to deploy the bna to that hyperledger'
         console.log 'need to know the bna file name!'
         console.log ''
