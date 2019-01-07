@@ -67,6 +67,7 @@ class HyperledgerService
         command: 'listenForCommands'
         uuid: @uuid
         secretKey: @secretKey
+      console.log 'uuid of client started outside of docker is sent to the server via websocket as command listenForCommands ' + @uuid
       dataJson = JSON.stringify(data) 
       @ws.send dataJson
       setTimeout (@sendPing
