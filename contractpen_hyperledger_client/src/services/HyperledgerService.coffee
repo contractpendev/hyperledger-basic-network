@@ -90,6 +90,7 @@ class HyperledgerService
         # archive_0f0ec513-daba-42e5-8ec5-13daba62e5c4.bna
         downloadUrl = 'https://contractpen.com/file/download/accordZip?file=' + dataJson.bnaFileName
         bnaDest = './data/' + name + '/bna/' + dataJson.bnaFileName
+        console.log 'bna dest ' + bnaDest
         await download(downloadUrl).pipe(fs.createWriteStream(bnaDest))
         console.log 'then to execute a shell script to deploy the bna to that hyperledger'
         console.log 'need to know the bna file name!'
