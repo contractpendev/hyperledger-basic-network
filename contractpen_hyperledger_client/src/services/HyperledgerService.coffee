@@ -19,6 +19,7 @@ class HyperledgerService
     @opts = opts
     @uuid = uuidv4()
     @secretKey = config.get('server.secretKey')
+    @composeControllerUuid = null
 
   reverseProxy: () =>
     serverIp = config.get('server.ipAddress')
@@ -30,10 +31,10 @@ class HyperledgerService
     # fi
     # sshpass -p 'PASSWORD' ssh -N -R 2210:localhost:8090 root@IPADDRESS
 
-  startHyperledgerInstance: (name) =>
+  startHyperledgerInstance: (name, uuid) =>
     console.log 'we are outside docker and going to start instance by name for name :' + name + ':'  
     try
-      b = await execa('./generate.sh', [name],
+      b = await execa('./generate.sh', [name, uuid],
         cwd: process.cwd() + '/../'
       )
       c = await execa('./start_docker.sh', [name],
@@ -81,7 +82,7 @@ class HyperledgerService
       if dataJson.command == 'deployBnaToHyperledgerInstance'
         console.log ''
         console.log ''
-        console.log dataJson.command
+        console.log 'command is ' + dataJson.command
         console.log ''
       if dataJson.command == 'listenForCommandsResult'
         baseUrl = config.get('server.restBaseUrl')
@@ -100,7 +101,7 @@ class HyperledgerService
         )      
         # Start it
         # Once started then store the name and tell server it is started
-        await @startHyperledgerInstance name
+        await @startHyperledgerInstance name, @uuid
       if dataJson.command == 'startMultipleHyperledgerInstances'  
         total = dataJson.total
 
@@ -123,7 +124,7 @@ class HyperledgerService
             secretKey: @secretKey
             hyperledgerName: name
           )      
-          await @startHyperledgerInstance name
+          await @startHyperledgerInstance name, @uuid
           console.log 'finished start hyperledger :' + name + ':'
 
       return
@@ -141,6 +142,8 @@ class HyperledgerService
       console.log ''
       command = options.command
       if command == 'startInDocker'
+        console.log 'The parent is ' + options.composeControllerUuid
+        @composeControllerUuid = options.composeControllerUuid
         serverIp = config.get('server.ipAddress')
         password = config.get('server.password')
         # Check if this ssh server ip is ok with our ssh
@@ -164,6 +167,7 @@ class HyperledgerService
         client = request.createClient(baseUrl)
         hyperledgerServerPortAndUuid = await client.post('proxyServiceApi/initFromHyperledgerClient', {
           name: options.name
+          composeControllerUuid: options.composeControllerUuid
           secretKey: @secretKey
         })
 
@@ -204,7 +208,7 @@ class HyperledgerService
       else if command == 'startOutsideDocker' 
         if options.name
           console.log 'project name is :' + options.name + ':'
-          @startHyperledgerInstance options.name
+          @startHyperledgerInstance options.name, @uuid
         else 
           console.log 'starting as a server'   
           @startServer()
