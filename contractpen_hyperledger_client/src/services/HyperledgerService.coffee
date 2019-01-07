@@ -80,11 +80,13 @@ class HyperledgerService
       console.log 'websocket message from server is'
       console.log dataJson
       if dataJson.command == 'deployBnaToHyperledgerInstance'
+        name = dataJson.name
         console.log ''
         console.log ''
         console.log 'command is ' + dataJson.command
         console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
         console.log 'then to execute a shell script to deploy the bna to that hyperledger'
+        console.log 'need to know the bna file name!'
         console.log ''
       if dataJson.command == 'listenForCommandsResult'
         baseUrl = config.get('server.restBaseUrl')
