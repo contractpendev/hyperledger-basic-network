@@ -85,7 +85,7 @@ class HyperledgerService
         console.log ''
         console.log 'command is ' + dataJson.command
         console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
-        console.log 'the filename is ' + dataJson.bnaFilename
+        console.log 'the filename is ' + dataJson.bnaFileName
         console.log 'then to execute a shell script to deploy the bna to that hyperledger'
         console.log 'need to know the bna file name!'
         console.log ''
