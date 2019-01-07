@@ -133,7 +133,8 @@ class HyperledgerService
   start: () =>
     optionDefinitions = [
       { name: 'command', defaultOption: true },
-      { name: 'name', alias: 'n', type: String }
+      { name: 'name', alias: 'n', type: String },
+      { name: 'composeControllerUuid', alias: 'c', type: String }
     ]
     try
       options = commandLineArgs(optionDefinitions)
