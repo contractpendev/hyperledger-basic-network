@@ -20,6 +20,7 @@ class HyperledgerService
     @opts = opts
     @uuid = uuidv4()
     @secretKey = config.get('server.secretKey')
+    @accordZipUrl = config.get('server.accordZipUrl')
     @composeControllerUuid = null
 
   reverseProxy: () =>
@@ -88,7 +89,7 @@ class HyperledgerService
         console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
         console.log 'the filename is ' + dataJson.bnaFileName
         # archive_0f0ec513-daba-42e5-8ec5-13daba62e5c4.bna
-        downloadUrl = 'https://contractpen.com/file/download/accordZip?file=' + dataJson.bnaFileName
+        downloadUrl = @accordZipUrl + dataJson.bnaFileName
         bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
         console.log 'bna dest ' + bnaDest
         await download(downloadUrl).pipe(fs.createWriteStream(bnaDest))
