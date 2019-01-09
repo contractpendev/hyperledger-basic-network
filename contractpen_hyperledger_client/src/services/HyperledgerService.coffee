@@ -18,7 +18,7 @@ class HyperledgerService
   constructor: (opts) ->
     console.log 'constructor in Hyperledger Service'
     @opts = opts
-    @uuid = uuidv4()
+    @uuid = null
     @secretKey = config.get('server.secretKey')
     @accordZipUrl = config.get('server.accordZipUrl')
     @composeControllerUuid = null
@@ -56,8 +56,18 @@ class HyperledgerService
     setTimeout (@sendPing
     ), (10*1000)
 
+  identifyClient: () =>
+    console.log 'identify client'
+    if (fs.existsSync('identity.txt'))
+      @uuid = await fs.readFile('identity.txt', 'utf8')
+    else  
+      @uuid = uuidv4()
+      await fs.writeFile('identity.txt', @uuid, 'utf8')
+
   startServer: () =>
     console.log 'start server'
+    @identifyClient()
+    console.log 'uuid is ' + @uuid
     websocketBaseUrl = config.get('server.websocketBaseUrl')
     # Submit uuid to the server via REST API
 
@@ -93,6 +103,13 @@ class HyperledgerService
         bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
         console.log 'bna dest ' + bnaDest
         await download(downloadUrl).pipe(fs.createWriteStream(bnaDest))
+        try
+          a = await execa('./deploy_bna.sh', [name, dataJson.bnaFileName],
+            cwd: process.cwd() + '/../'
+          )
+          console.log a
+        catch ex 
+          console.log ex 
         console.log 'then to execute a shell script to deploy the bna to that hyperledger'
         console.log 'need to know the bna file name!'
         console.log ''
