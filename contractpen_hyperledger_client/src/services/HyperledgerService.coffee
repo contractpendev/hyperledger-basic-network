@@ -69,10 +69,12 @@ class HyperledgerService
     result = null
     fs.createReadStream(bna).pipe(unzip.Parse()).on 'entry', (entry) ->
       fileName = entry.path
+      console.log 'filename is :' + fileName + ':'
       type = entry.type
       # 'Directory' or 'File' 
       size = entry.size
-      if fileName == 'package.json'
+      if fileName.includes('package.json')
+        console.log 'writing package.json'
         entry.pipe fs.createWriteStream('package.json') # @todo Make a temp location and delete it
         contents = fs.readFileSync('package.json', 'utf8')
         jsonContent = JSON.parse(contents)
