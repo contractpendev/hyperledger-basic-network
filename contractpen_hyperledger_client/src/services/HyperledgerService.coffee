@@ -67,7 +67,7 @@ class HyperledgerService
   startServer: () =>
     console.log 'start server'
     @identifyClient()
-    console.log 'uuid is ' + @uuid
+    console.log 'uuid identity of this client is ' + @uuid
     websocketBaseUrl = config.get('server.websocketBaseUrl')
     # Submit uuid to the server via REST API
 
