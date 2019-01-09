@@ -66,8 +66,10 @@ class HyperledgerService
       await fs.writeFile('identity.txt', @uuid, 'utf8')
 
   readPackageJsonFromArchive: (bna) =>
+    console.log 'readPackageJsonFromArchive'
     result = null
     fs.createReadStream(bna).pipe(unzip.Parse()).on 'entry', (entry) ->
+      console.log '1'
       fileName = entry.path
       console.log 'filename is :' + fileName + ':'
       type = entry.type
@@ -81,7 +83,6 @@ class HyperledgerService
         result = jsonContent
       else
         entry.autodrain()
-      return        
     result  
 
   startServer: () =>
