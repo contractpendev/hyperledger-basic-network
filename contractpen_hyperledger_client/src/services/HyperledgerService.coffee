@@ -176,6 +176,9 @@ class HyperledgerService
         @composeControllerUuid = options.composeControllerUuid
         serverIp = config.get('server.ipAddress')
         password = config.get('server.password')
+        # Generate the primary card if it does not already exist
+        if (not fs.existsSync('./../crypto-config/PeerAdmin@hlfv12.card'))
+          createCard = await execa('./../cli/createcard.sh')
         # Check if this ssh server ip is ok with our ssh
         output = {}
         try
