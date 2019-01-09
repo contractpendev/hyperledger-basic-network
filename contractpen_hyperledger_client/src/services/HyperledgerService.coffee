@@ -64,6 +64,23 @@ class HyperledgerService
       @uuid = uuidv4()
       await fs.writeFile('identity.txt', @uuid, 'utf8')
 
+  readPackageJsonFromArchive: (bna) =>
+    result = null
+    fs.createReadStream(bna).pipe(unzip.Parse()).on 'entry', (entry) ->
+      fileName = entry.path
+      type = entry.type
+      # 'Directory' or 'File' 
+      size = entry.size
+      if fileName == 'package.json'
+        entry.pipe fs.createWriteStream('package.json') # @todo Make a temp location and delete it
+        contents = fs.readFileSync('package.json', 'utf8')
+        jsonContent = JSON.parse(contents)
+        result = jsonContent
+      else
+        entry.autodrain()
+      return        
+    result  
+
   startServer: () =>
     console.log 'start server'
     @identifyClient()
@@ -103,6 +120,15 @@ class HyperledgerService
         bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
         console.log 'bna dest ' + bnaDest
         await download(downloadUrl).pipe(fs.createWriteStream(bnaDest))
+        json = await @readPackageJsonFromArchive(bnaDest)
+        console.log 'json is'
+        console.log json
+        console.log 'so therefore name is'
+        console.log json.name
+        console.log json.version
+        # $1 is logical name from package.json inside the bna file
+        # $2 is the version from package.json inside the bna file
+        # $3 is the BNA file name with BNA at the end        
         try
           a = await execa('./deploy_bna.sh', [name, dataJson.bnaFileName],
             cwd: process.cwd() + '/../'
