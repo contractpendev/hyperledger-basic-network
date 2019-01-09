@@ -12,6 +12,7 @@ request = require 'request-json'
 WebSocket = require('ws')
 uuidv4 = require 'uuid/v4'
 download = require 'download'
+unzip = require 'unzip'
 
 class HyperledgerService
 
