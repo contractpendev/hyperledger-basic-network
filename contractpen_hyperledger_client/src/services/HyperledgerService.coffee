@@ -87,6 +87,7 @@ class HyperledgerService
     result  
 
   startServer: () =>
+    @readPackageJsonFromArchive('./../data/archive_6bdbe3e2-1f62-4989-9be3-e21f6289891a.bna')
     console.log 'start server'
     @identifyClient()
     console.log 'uuid identity of this client is ' + @uuid
@@ -125,7 +126,7 @@ class HyperledgerService
         bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
         console.log 'bna dest ' + bnaDest
         await download(downloadUrl).pipe(fs.createWriteStream(bnaDest))
-        json = await @readPackageJsonFromArchive(bnaDest)
+        json = @readPackageJsonFromArchive(bnaDest)
         console.log 'json is'
         console.log json
         console.log 'so therefore name is'
