@@ -76,10 +76,10 @@ class HyperledgerService
       type = entry.type
       # 'Directory' or 'File' 
       size = entry.size
-      if fileName.includes('package.json')
+      if fileName == 'package.json'
         console.log 'writing package.json'
-        entry.pipe fs.createWriteStream('package.json') # @todo Make a temp location and delete it
-        contents = fs.readFileSync('package.json', 'utf8')
+        entry.pipe fs.createWriteStream('out.json') # @todo Make a temp location and delete it
+        contents = fs.readFileSync('out.json', 'utf8')
         jsonContent = JSON.parse(contents)
         result = jsonContent
       else
