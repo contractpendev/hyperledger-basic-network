@@ -59,7 +59,7 @@ class HyperledgerService
   identifyClient: () =>
     console.log 'identify client'
     if (fs.existsSync('identity.txt'))
-      @uuid = await fs.readFile('identity.txt', 'utf8')
+      @uuid = fs.readFileSync('identity.txt', 'utf8')
     else  
       @uuid = uuidv4()
       await fs.writeFile('identity.txt', @uuid, 'utf8')
