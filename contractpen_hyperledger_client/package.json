@@ -37,6 +37,7 @@
     "request-promise-native": "^1.0.5",
     "transformer-proxy": "^0.3.5",
     "unzip": "^0.1.11",
+    "unzipper": "^0.9.7",
     "uuid": "^3.3.2",
     "winston": "^3.0.0",
     "ws": "^6.1.2"

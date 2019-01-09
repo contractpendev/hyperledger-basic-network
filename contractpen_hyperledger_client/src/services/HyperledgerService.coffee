@@ -13,6 +13,7 @@ WebSocket = require('ws')
 uuidv4 = require 'uuid/v4'
 download = require 'download'
 unzip = require 'unzip'
+unzipper = require 'unzipper'
 
 class HyperledgerService
 
@@ -68,7 +69,7 @@ class HyperledgerService
   readPackageJsonFromArchive: (bna) =>
     console.log 'readPackageJsonFromArchive'
     result = null
-    fs.createReadStream(bna).pipe(unzip.Parse()).on 'entry', (entry) ->
+    fs.createReadStream(bna).pipe(unzipper.Parse()).on 'entry', (entry) ->
       console.log '1'
       fileName = entry.path
       console.log 'filename is :' + fileName + ':'
