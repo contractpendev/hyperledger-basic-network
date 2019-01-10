@@ -77,13 +77,17 @@ class HyperledgerService
     return
 
   readPackageJsonFromArchive: (bna) =>
+    if (not fs.existsSync(bna))
+      console.log 'file not exist'
     promise = new Promise((resolve, reject) => 
       fs.createReadStream(bna).pipe(unzipper.Parse()).on('entry', (entry) ->
+        console.log 'entry'
         fileName = entry.path
         type = entry.type
         # 'Directory' or 'File' 
         size = entry.size
         if fileName == 'package.json'
+          console.log 'found!'
           streamToString(entry, (data) ->
             jsonContent = JSON.parse(data)
             resolve(jsonContent)
@@ -92,6 +96,14 @@ class HyperledgerService
           entry.autodrain())
     )
     promise
+
+  downloadFile: (downloadUrl, bnaDest) =>
+    new Promise((resolve, reject) =>
+      stream = download(downloadUrl).pipe(fs.createWriteStream(bnaDest))
+      stream.on('finish', () =>
+        resolve(null)
+      )
+    )  
 
   startServer: () =>
     @identifyClient()
@@ -130,7 +142,7 @@ class HyperledgerService
         downloadUrl = @accordZipUrl + dataJson.bnaFileName
         bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
         console.log 'bna dest ' + bnaDest
-        await download(downloadUrl).pipe(fs.createWriteStream(bnaDest))
+        await @downloadFile(downloadUrl, bnaDest)
         json = await @readPackageJsonFromArchive(bnaDest)
         name = json.name
         version = json.version
@@ -138,7 +150,7 @@ class HyperledgerService
         # $2 is the version from package.json inside the bna file
         # $3 is the BNA file name with BNA at the end        
         try
-          a = await execa('./deploy_bna.sh', [name, version, dataJson.bnaFileName],
+          a = await execa('./deploy_bna.sh', [dataJson.name + '.commandline', name, version, dataJson.bnaFileName],
             cwd: process.cwd() + '/../'
           )
           console.log a
