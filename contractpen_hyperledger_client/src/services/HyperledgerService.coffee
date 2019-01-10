@@ -219,6 +219,7 @@ class HyperledgerService
       command = options.command
       if command == 'startInDocker'
         console.log 'The parent is ' + options.composeControllerUuid
+        console.log 'current directory is :' + process.cwd() + ':'
         @composeControllerUuid = options.composeControllerUuid
         serverIp = config.get('server.ipAddress')
         password = config.get('server.password')
