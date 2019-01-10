@@ -66,29 +66,34 @@ class HyperledgerService
       @uuid = uuidv4()
       await fs.writeFile('identity.txt', @uuid, 'utf8')
 
+  streamToString = (stream, cb) ->
+    chunks = []
+    stream.on 'data', (chunk) ->
+      chunks.push chunk.toString()
+      return
+    stream.on 'end', ->
+      cb chunks.join('')
+      return
+    return
+
   readPackageJsonFromArchive: (bna) =>
-    console.log 'readPackageJsonFromArchive'
-    result = null
-    fs.createReadStream(bna).pipe(unzipper.Parse()).on 'entry', (entry) ->
-      console.log '1'
-      fileName = entry.path
-      console.log 'filename is :' + fileName + ':'
-      type = entry.type
-      # 'Directory' or 'File' 
-      size = entry.size
-      if fileName == 'package.json'
-        console.log 'writing package.json'
-        entry.pipe fs.createWriteStream('out.json') # @todo Make a temp location and delete it
-        contents = fs.readFileSync('out.json', 'utf8')
-        jsonContent = JSON.parse(contents)
-        result = jsonContent
-      else
-        entry.autodrain()
-    result  
+    promise = new Promise((resolve, reject) => 
+      fs.createReadStream(bna).pipe(unzipper.Parse()).on('entry', (entry) ->
+        fileName = entry.path
+        type = entry.type
+        # 'Directory' or 'File' 
+        size = entry.size
+        if fileName == 'package.json'
+          streamToString(entry, (data) ->
+            jsonContent = JSON.parse(data)
+            resolve(jsonContent)
+          )
+        else
+          entry.autodrain())
+    )
+    promise
 
   startServer: () =>
-    @readPackageJsonFromArchive('./../data/archive_6bdbe3e2-1f62-4989-9be3-e21f6289891a.bna')
-    console.log 'start server'
     @identifyClient()
     console.log 'uuid identity of this client is ' + @uuid
     websocketBaseUrl = config.get('server.websocketBaseUrl')
@@ -126,17 +131,14 @@ class HyperledgerService
         bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
         console.log 'bna dest ' + bnaDest
         await download(downloadUrl).pipe(fs.createWriteStream(bnaDest))
-        json = @readPackageJsonFromArchive(bnaDest)
-        console.log 'json is'
-        console.log json
-        console.log 'so therefore name is'
-        console.log json.name
-        console.log json.version
+        json = await @readPackageJsonFromArchive(bnaDest)
+        name = json.name
+        version = json.version
         # $1 is logical name from package.json inside the bna file
         # $2 is the version from package.json inside the bna file
         # $3 is the BNA file name with BNA at the end        
         try
-          a = await execa('./deploy_bna.sh', [name, dataJson.bnaFileName],
+          a = await execa('./deploy_bna.sh', [name, version, dataJson.bnaFileName],
             cwd: process.cwd() + '/../'
           )
           console.log a
