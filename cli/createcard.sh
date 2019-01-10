@@ -1,3 +1,4 @@
+cd ..
 cd cli
 cd ./../crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp/keystore
 export PRIV_KEYFILE=$(ls *_sk)
