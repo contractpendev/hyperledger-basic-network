@@ -150,7 +150,7 @@ class HyperledgerService
         # $2 is the version from package.json inside the bna file
         # $3 is the BNA file name with BNA at the end        
         try
-          a = await execa('./deploy_bna.sh', [dataJson.name + '.commandline', name, version, dataJson.bnaFileName],
+          a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', name, version, dataJson.bnaFileName],
             cwd: process.cwd() + '/../'
           )
           console.log a
