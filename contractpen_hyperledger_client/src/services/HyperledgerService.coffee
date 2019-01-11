@@ -281,8 +281,8 @@ class HyperledgerService
             await execa('/usr/bin/sshpass', ['-p', password, 'ssh', '-o', 'ServerAliveInterval=60', '-o', 'ServerAliveCountMax=120', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', '-N', '-R', serverPort.toString() + ':blockchain-explorer:8080', 'root@' + serverIp])
           catch ex 
             console.log ex 
-            await @sleep(5000)
-            
+          await @sleep(5000)
+
         console.log('how did we get here?')  
         # ./createcard.sh
         #try
