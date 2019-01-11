@@ -114,101 +114,105 @@ class HyperledgerService
     # Submit uuid to the server via REST API
 
     # Submit uuid to the pubsub server to listen for commands
-    @ws = new WebSocket(websocketBaseUrl + 'echo')
-    console.log 'just before...'
-    @ws.on 'close', =>
-      console.log 'the websocket closed, why?'
-      console.log 'so I will try to reopen every 5 seconds'
-      setTimeout(() => 
-        @startServer()
-      , 5000)
-    @ws.on 'open', =>
-      data =
-        command: 'listenForCommands'
-        uuid: @uuid
-        secretKey: @secretKey
-      console.log 'uuid of client started outside of docker is sent to the server via websocket as command listenForCommands ' + @uuid
-      dataJson = JSON.stringify(data) 
-      @ws.send dataJson
-      setTimeout (@sendPing
-      ), (10*1000)
-      return
-    @ws.on 'message', (data) =>
-      dataJson = JSON.parse(data)
-      console.log 'websocket message from server is'
-      console.log dataJson
-      if dataJson.command == 'deployBnaToHyperledgerInstance'
-        name = dataJson.name
-        console.log ''
-        console.log ''
-        console.log 'command is ' + dataJson.command
-        console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
-        console.log 'the filename is ' + dataJson.bnaFileName
-        # archive_0f0ec513-daba-42e5-8ec5-13daba62e5c4.bna
-        downloadUrl = @accordZipUrl + dataJson.bnaFileName
-        bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
-        console.log 'bna dest ' + bnaDest
-        await @downloadFile(downloadUrl, bnaDest)
-        json = await @readPackageJsonFromArchive(bnaDest)
-        name = json.name
-        version = json.version
-        # $1 is logical name from package.json inside the bna file
-        # $2 is the version from package.json inside the bna file
-        # $3 is the BNA file name with BNA at the end        
-        try
-          a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', name, version, dataJson.bnaFileName],
-            cwd: process.cwd() + '/../'
-          )
-          console.log a
-        catch ex 
-          console.log ex 
-        console.log 'then to execute a shell script to deploy the bna to that hyperledger'
-        console.log 'need to know the bna file name!'
-        console.log ''
-      if dataJson.command == 'listenForCommandsResult'
-        baseUrl = config.get('server.restBaseUrl')
-        client = request.createClient(baseUrl)
-        await client.post('proxyServiceApi/hyperledgerClientAwaitingCommands', 
-          secretKey: @secretKey
+    try
+      @ws = new WebSocket(websocketBaseUrl + 'echo')
+      console.log 'just before...'
+      @ws.on 'close', =>
+        console.log 'the websocket closed, why?'
+        console.log 'so I will try to reopen every 5 seconds'
+        setTimeout(() => 
+          @startServer()
+        , 5000)
+      @ws.on 'open', =>
+        data =
+          command: 'listenForCommands'
           uuid: @uuid
-        )
-      if dataJson.command == 'startHyperledgerInstance'  
-        name = dataJson.hyperledgerName
-        baseUrl = config.get('server.restBaseUrl')
-        client = request.createClient(baseUrl)        
-        await client.post('proxyServiceApi/attemptingToStartHyperledgerClient', 
           secretKey: @secretKey
-          hyperledgerName: name
-        )      
-        # Start it
-        # Once started then store the name and tell server it is started
-        await @startHyperledgerInstance name, @uuid
-      if dataJson.command == 'startMultipleHyperledgerInstances'  
-        total = dataJson.total
-
-        numbers = [1..total]
-
-        names = numbers.map((n) ->
-          'hyperledger-' + uuidv4()
-        )
-        console.log names
-
-        # Here create total names in an array and then send that to the server and attempt to start them 
-        baseUrl = config.get('server.restBaseUrl')
-        client = request.createClient(baseUrl)        
- 
-        # Start it
-        # Once started then store the name and tell server it is started
-        for name in names
-          console.log 'Attempting to start hyperledger with name :' + name + ':'
+        console.log 'uuid of client started outside of docker is sent to the server via websocket as command listenForCommands ' + @uuid
+        dataJson = JSON.stringify(data) 
+        @ws.send dataJson
+        setTimeout (@sendPing
+        ), (10*1000)
+        return
+      @ws.on 'message', (data) =>
+        dataJson = JSON.parse(data)
+        console.log 'websocket message from server is'
+        console.log dataJson
+        if dataJson.command == 'deployBnaToHyperledgerInstance'
+          name = dataJson.name
+          console.log ''
+          console.log ''
+          console.log 'command is ' + dataJson.command
+          console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
+          console.log 'the filename is ' + dataJson.bnaFileName
+          # archive_0f0ec513-daba-42e5-8ec5-13daba62e5c4.bna
+          downloadUrl = @accordZipUrl + dataJson.bnaFileName
+          bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
+          console.log 'bna dest ' + bnaDest
+          await @downloadFile(downloadUrl, bnaDest)
+          json = await @readPackageJsonFromArchive(bnaDest)
+          name = json.name
+          version = json.version
+          # $1 is logical name from package.json inside the bna file
+          # $2 is the version from package.json inside the bna file
+          # $3 is the BNA file name with BNA at the end        
+          try
+            a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', name, version, dataJson.bnaFileName],
+              cwd: process.cwd() + '/../'
+            )
+            console.log a
+          catch ex 
+            console.log ex 
+          console.log 'then to execute a shell script to deploy the bna to that hyperledger'
+          console.log 'need to know the bna file name!'
+          console.log ''
+        if dataJson.command == 'listenForCommandsResult'
+          baseUrl = config.get('server.restBaseUrl')
+          client = request.createClient(baseUrl)
+          await client.post('proxyServiceApi/hyperledgerClientAwaitingCommands', 
+            secretKey: @secretKey
+            uuid: @uuid
+          )
+        if dataJson.command == 'startHyperledgerInstance'  
+          name = dataJson.hyperledgerName
+          baseUrl = config.get('server.restBaseUrl')
+          client = request.createClient(baseUrl)        
           await client.post('proxyServiceApi/attemptingToStartHyperledgerClient', 
             secretKey: @secretKey
             hyperledgerName: name
           )      
+          # Start it
+          # Once started then store the name and tell server it is started
           await @startHyperledgerInstance name, @uuid
-          console.log 'finished start hyperledger :' + name + ':'
+        if dataJson.command == 'startMultipleHyperledgerInstances'  
+          total = dataJson.total
 
-      return
+          numbers = [1..total]
+
+          names = numbers.map((n) ->
+            'hyperledger-' + uuidv4()
+          )
+          console.log names
+
+          # Here create total names in an array and then send that to the server and attempt to start them 
+          baseUrl = config.get('server.restBaseUrl')
+          client = request.createClient(baseUrl)        
+  
+          # Start it
+          # Once started then store the name and tell server it is started
+          for name in names
+            console.log 'Attempting to start hyperledger with name :' + name + ':'
+            await client.post('proxyServiceApi/attemptingToStartHyperledgerClient', 
+              secretKey: @secretKey
+              hyperledgerName: name
+            )      
+            await @startHyperledgerInstance name, @uuid
+            console.log 'finished start hyperledger :' + name + ':'
+    catch e
+      setTimeout(() => 
+        @startServer()
+      , 5000)
+    return
 
   sleep = (ms) ->
     new Promise((resolve) ->
