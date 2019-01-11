@@ -50,6 +50,8 @@ class HyperledgerService
       
 
   sendPing: () =>
+    if (@ws.readyState == @ws.CLOSED)
+      return
     ping =
       command: 'ping'
       secretKey: @secretKey
