@@ -116,6 +116,10 @@ class HyperledgerService
     console.log 'just before...'
     @ws.on 'close', =>
       console.log 'the websocket closed, why?'
+      console.log 'so I will try to reopen every 5 seconds'
+      setTimeout(() => 
+        @startServer()
+      , 5000)
     @ws.on 'open', =>
       data =
         command: 'listenForCommands'
