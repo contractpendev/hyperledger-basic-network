@@ -117,6 +117,8 @@ class HyperledgerService
     try
       @ws = new WebSocket(websocketBaseUrl + 'echo')
       console.log 'just before...'
+      @ws.on('error', =>
+        console.log 'error')
       @ws.on 'close', =>
         console.log 'the websocket closed, why?'
         console.log 'so I will try to reopen every 5 seconds'
