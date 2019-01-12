@@ -141,33 +141,41 @@ class HyperledgerService
         console.log 'websocket message from server is'
         console.log dataJson
         if dataJson.command == 'deployBnaToHyperledgerInstance'
-          name = dataJson.name
-          console.log ''
-          console.log ''
-          console.log 'command is ' + dataJson.command
-          console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
-          console.log 'the filename is ' + dataJson.bnaFileName
-          # archive_0f0ec513-daba-42e5-8ec5-13daba62e5c4.bna
-          downloadUrl = @accordZipUrl + dataJson.bnaFileName
-          bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
-          console.log 'bna dest ' + bnaDest
-          await @downloadFile(downloadUrl, bnaDest)
-          json = await @readPackageJsonFromArchive(bnaDest)
-          name = json.name
-          version = json.version
-          # $1 is logical name from package.json inside the bna file
-          # $2 is the version from package.json inside the bna file
-          # $3 is the BNA file name with BNA at the end        
+          job = dataJson.job
           try
-            a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', name, version, dataJson.bnaFileName],
-              cwd: process.cwd() + '/../'
-            )
-            console.log a
-          catch ex 
-            console.log ex 
-          console.log 'then to execute a shell script to deploy the bna to that hyperledger'
-          console.log 'need to know the bna file name!'
-          console.log ''
+            name = dataJson.name
+            transactionId = dataJson.job.transactionId
+            console.log ''
+            console.log ''
+            console.log 'command is ' + dataJson.command
+            console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
+            console.log 'the filename is ' + dataJson.bnaFileName
+            # archive_0f0ec513-daba-42e5-8ec5-13daba62e5c4.bna
+            downloadUrl = @accordZipUrl + dataJson.bnaFileName
+            bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
+            console.log 'bna dest ' + bnaDest
+            await @downloadFile(downloadUrl, bnaDest)
+            json = await @readPackageJsonFromArchive(bnaDest)
+            name = json.name
+            version = json.version
+            # $1 is logical name from package.json inside the bna file
+            # $2 is the version from package.json inside the bna file
+            # $3 is the BNA file name with BNA at the end        
+            try
+              a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', name, version, dataJson.bnaFileName],
+                cwd: process.cwd() + '/../'
+              )
+              console.log a
+            catch ex 
+              console.log ex 
+            console.log 'then to execute a shell script to deploy the bna to that hyperledger'
+            console.log 'need to know the bna file name!'
+            console.log ''
+            # Completion of this requires notification to the work server
+            # transactionId and job need to be sent to some server URL to notify on REDIS the job result
+          catch e 
+            console.log e 
+          @ws.send('workerFinishedJob', JSON.stringify(job))
         if dataJson.command == 'listenForCommandsResult'
           baseUrl = config.get('server.restBaseUrl')
           client = request.createClient(baseUrl)
