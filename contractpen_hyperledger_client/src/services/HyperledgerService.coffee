@@ -175,7 +175,12 @@ class HyperledgerService
             # transactionId and job need to be sent to some server URL to notify on REDIS the job result
           catch e 
             console.log e 
-          @ws.send('workerFinishedJob', JSON.stringify(job))
+          data =
+            command: 'workerFinishedJob'
+            uuid: @uuid
+            secretKey: @secretKey
+            job: job
+          @ws.send(JSON.stringify(data))
         if dataJson.command == 'listenForCommandsResult'
           baseUrl = config.get('server.restBaseUrl')
           client = request.createClient(baseUrl)
