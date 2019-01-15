@@ -7,6 +7,7 @@ Name file default.json
     "restBaseUrl": "",
     "pubsubRestBaseUrl": "",
     "websocketBaseUrl": "",
+    "accordZipUrl": "",
     "secretKey": ""
   }
 }
