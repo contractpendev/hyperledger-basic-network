@@ -191,7 +191,7 @@ services:
     - ./../../cli/:/home/cli
     - ./config/:/home/config
     - ./crypto-config/:/home/crypto-config
-    - ./../../contractpen_hyperledger_client/:/home/contractpen_hyperledger_client
+    - ./../../contractpen-hyperledger-client/:/home/contractpen-hyperledger-client
     - ./bna/:/home/bna
 #    - /Users/philipandrew/.composer/:/root/.composer
     container_name: ${COMPOSE_PROJECT_NAME}.commandline
@@ -205,13 +205,13 @@ services:
          
   hyperledgerclient:
     image: contractpen/commandline
-    command: /bin/bash ./contractpen_hyperledger_client/run_in_docker.sh ${COMPOSE_PROJECT_NAME} ${COMPOSE_CONTROLLER_UUID}
+    command: /bin/bash ./contractpen-hyperledger-client/run_in_docker.sh ${COMPOSE_PROJECT_NAME} ${COMPOSE_CONTROLLER_UUID}
     volumes:
     - ./../../nodejs/:/home/nodejs
     - ./../../cli/:/home/cli
     - ./config/:/home/config
     - ./crypto-config/:/home/crypto-config
-    - ./../../contractpen_hyperledger_client/:/home/contractpen_hyperledger_client
+    - ./../../contractpen-hyperledger-client/:/home/contractpen-hyperledger-client
     - ./bna/:/home/bna
 #    - /Users/philipandrew/.composer/:/root/.composer
     container_name: ${COMPOSE_PROJECT_NAME}.hyperledgerclient
