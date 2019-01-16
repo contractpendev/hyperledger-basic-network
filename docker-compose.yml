@@ -24,7 +24,7 @@ services:
 #      - "7054:7054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw'
     volumes:
-      - ./crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./config/crypto-config/peerOrganizations/org1.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ${COMPOSE_PROJECT_NAME}.ca.example.com
     networks:
 #      - basic
@@ -48,8 +48,8 @@ services:
 #      - 7050:7050
     volumes:
         - ./config/:/etc/hyperledger/configtx
-        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
-        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
+        - ./config/crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/:/etc/hyperledger/msp/orderer
+        - ./config/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
     networks:
 #      - basic
       no-internet:
@@ -88,8 +88,8 @@ services:
 #      - 7053:7053
     volumes:
         - /var/run/:/host/var/run/
-        - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/msp/peer
-        - ./crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
+        - ./config/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/msp/peer
+        - ./config/crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
     depends_on:
       - orderer.example.com
@@ -134,7 +134,7 @@ services:
     volumes:
         - /var/run/:/host/var/run/
         - ./chaincode/:/opt/gopath/src/github.com/chaincode/
-        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./config/crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
     networks:
 #        - basic
       no-internet:
@@ -173,8 +173,8 @@ services:
       - DATABASE_USERNAME=hppoc
       - DATABASE_PASSWORD=password
     volumes:
-      - ./config.json:/opt/explorer/app/platform/fabric/config.json
-      - ./crypto-config:/tmp/crypto
+      - ./config/config.json:/opt/explorer/app/platform/fabric/config.json
+      - ./config/crypto-config:/tmp/crypto
     ports:
       - "8090:8080"
     networks:
@@ -190,15 +190,32 @@ services:
     - ./../../nodejs/:/home/nodejs
     - ./../../cli/:/home/cli
     - ./config/:/home/config
-    - ./crypto-config/:/home/crypto-config
+    - ./config/crypto-config/:/home/crypto-config
     - ./../../contractpen-hyperledger-client/:/home/contractpen-hyperledger-client
     - ./bna/:/home/bna
-#    - /Users/philipandrew/.composer/:/root/.composer
     container_name: ${COMPOSE_PROJECT_NAME}.commandline
     working_dir: /home
-    ports:
-      - "3000:3000"
+#    ports:
+#      - "3000:3000"
+    networks:  
+      no-internet:
+        aliases:
+         - commandline
+
+  hyperledgerfabrictools:
+    image: hyperledger/fabric-tools       
+    command: sleep infinity
+    volumes:
+    - ./../../nodejs/:/home/nodejs
+    - ./../../cli/:/home/cli
+    - ./config/:/home/config
+    - ./config/crypto-config/:/home/crypto-config
+    - ./../../contractpen-hyperledger-client/:/home/contractpen-hyperledger-client
+    - ./bna/:/home/bna
+    container_name: ${COMPOSE_PROJECT_NAME}.hyperledgerfabrictools
+    working_dir: /home
     networks:
+      basic:      
       no-internet:
         aliases:
          - commandline
@@ -210,7 +227,7 @@ services:
     - ./../../nodejs/:/home/nodejs
     - ./../../cli/:/home/cli
     - ./config/:/home/config
-    - ./crypto-config/:/home/crypto-config
+    - ./config/crypto-config/:/home/crypto-config
     - ./../../contractpen-hyperledger-client/:/home/contractpen-hyperledger-client
     - ./bna/:/home/bna
 #    - /Users/philipandrew/.composer/:/root/.composer

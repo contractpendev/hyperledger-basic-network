@@ -49,8 +49,7 @@ sleep ${FABRIC_START_TIMEOUT}
 docker-compose -f docker-compose.yml up -d blockchain-explorer
 docker-compose -f docker-compose.yml up -d cli
 
-docker-compose -f docker-compose.yml up -d commandline
-
+#docker-compose -f docker-compose.yml up -d commandline
 docker-compose -f docker-compose.yml up -d hyperledgerclient
 
 echo 'finished'
