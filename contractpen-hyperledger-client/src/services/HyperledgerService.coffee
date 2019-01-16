@@ -64,7 +64,7 @@ class HyperledgerService
     if (fs.existsSync('identity.txt'))
       @uuid = fs.readFileSync('identity.txt', 'utf8')
     else  
-      @uuid = uuidv4()
+      @uuid = uuidv4().split('-').join('')
       await fs.writeFile('identity.txt', @uuid, 'utf8')
 
   streamToString = (stream, cb) ->
@@ -160,7 +160,13 @@ class HyperledgerService
             version = json.version
             # $1 is logical name from package.json inside the bna file
             # $2 is the version from package.json inside the bna file
-            # $3 is the BNA file name with BNA at the end        
+            # $3 is the BNA file name with BNA at the end      
+            console.log 'call deploy_bna.sh with parameters'  
+            console.log dataJson.name + '.hyperledgerclient'
+            console.log name
+            console.log version
+            console.log dataJson.bnaFileName
+            console.log(process.cwd() + '/../')
             try
               a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', name, version, dataJson.bnaFileName],
                 cwd: process.cwd() + '/../'
@@ -205,7 +211,7 @@ class HyperledgerService
           numbers = [1..total]
 
           names = numbers.map((n) ->
-            'hyperledger-' + uuidv4()
+            'hyperledger' + uuidv4().split('-').join('')
           )
           console.log names
 

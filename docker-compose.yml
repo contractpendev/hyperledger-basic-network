@@ -8,7 +8,7 @@ version: '3'
 networks:
   basic:
     driver: overlay
-  no-internet:
+  nointernet:
     driver: overlay
     internal: true
 
@@ -28,7 +28,7 @@ services:
     container_name: ${COMPOSE_PROJECT_NAME}.ca.example.com
     networks:
 #      - basic
-      no-internet:
+      nointernet:
         aliases:
          - ca.example.com
 
@@ -52,7 +52,7 @@ services:
         - ./config/crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/:/etc/hyperledger/msp/peerOrg1
     networks:
 #      - basic
-      no-internet:
+      nointernet:
         aliases:
          - orderer.example.com
 
@@ -96,7 +96,9 @@ services:
       - couchdb
     networks:
       basic:
-      no-internet:
+        aliases:
+         - peer0.org1.example.com
+      nointernet:
         aliases:
          - peer0.org1.example.com
 
@@ -112,7 +114,7 @@ services:
 #      - 5984:5984
     networks:
 #      - basic
-      no-internet:
+      nointernet:
         aliases:
          - couchdb
 
@@ -137,7 +139,7 @@ services:
         - ./config/crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
     networks:
 #        - basic
-      no-internet:
+      nointernet:
           aliases:
            - cli
     #depends_on:
@@ -159,7 +161,7 @@ services:
 #      - "5422:5432"
     networks:
 #      - basic
-      no-internet:
+      nointernet:
         aliases:
          - blockchain-explorer-db
          
@@ -179,7 +181,7 @@ services:
       - "8090:8080"
     networks:
 #      basic:
-      no-internet:
+      nointernet:
         aliases:
          - blockchain-explorer
          
@@ -198,7 +200,7 @@ services:
 #    ports:
 #      - "3000:3000"
     networks:  
-      no-internet:
+      nointernet:
         aliases:
          - commandline
 
@@ -216,7 +218,7 @@ services:
     working_dir: /home
     networks:
       basic:      
-      no-internet:
+      nointernet:
         aliases:
          - commandline
          
@@ -235,7 +237,9 @@ services:
     working_dir: /home
     networks:
       basic:
-      no-internet:
+        aliases:
+         - hyperledgerclient
+      nointernet:
         aliases:
          - hyperledgerclient
          
