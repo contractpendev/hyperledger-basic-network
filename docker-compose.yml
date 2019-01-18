@@ -96,8 +96,6 @@ services:
       - couchdb
     networks:
       basic:
-        aliases:
-         - peer0.org1.example.com
       nointernet:
         aliases:
          - peer0.org1.example.com
@@ -237,8 +235,6 @@ services:
     working_dir: /home
     networks:
       basic:
-        aliases:
-         - hyperledgerclient
       nointernet:
         aliases:
          - hyperledgerclient

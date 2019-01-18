@@ -106,6 +106,10 @@ class HyperledgerService
       )
     )  
 
+  getRandomArbitrary: (min, max) ->
+    i = Math.random() * (max - min) + min
+    return Math.floor(i)
+    
   startServer: () =>
     @identifyClient()
     console.log 'uuid identity of this client is ' + @uuid
@@ -143,35 +147,84 @@ class HyperledgerService
         if dataJson.command == 'deployBnaToHyperledgerInstance'
           job = dataJson.job
           try
-            name = dataJson.name
+            #dataJsonName = dataJson.name
+            #uuid = dataJson.uuid 
+            #controllerUuid = dataJson.controllerUuid
+            bnaFileName = dataJson.bnaFileName             
             transactionId = dataJson.job.transactionId
-            console.log ''
+            name = dataJson.name
+            console.log ' '
             console.log ''
             console.log 'command is ' + dataJson.command
             console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
             console.log 'the filename is ' + dataJson.bnaFileName
+            console.log 'transaction id ' + transactionId
+            composerRestPort = @getRandomArbitrary(17200, 65535)
+            console.log 'composer rest port ' + composerRestPort
             # archive_0f0ec513-daba-42e5-8ec5-13daba62e5c4.bna
             downloadUrl = @accordZipUrl + dataJson.bnaFileName
             bnaDest = './../data/' + name + '/bna/' + dataJson.bnaFileName
             console.log 'bna dest ' + bnaDest
             await @downloadFile(downloadUrl, bnaDest)
             json = await @readPackageJsonFromArchive(bnaDest)
-            name = json.name
+            jsonName = json.name
             version = json.version
+            console.log 'jsonName ' + jsonName
+            console.log 'version ' + version
             # $1 is logical name from package.json inside the bna file
             # $2 is the version from package.json inside the bna file
-            # $3 is the BNA file name with BNA at the end      
-            console.log 'call deploy_bna.sh with parameters'  
+            # $3 is the BNA file name with BNA at the end  
+            console.log ''    
+            console.log 'call deploy_bna.sh with parameters -----------------------------------'  
             console.log dataJson.name + '.hyperledgerclient'
-            console.log name
+            console.log jsonName
             console.log version
             console.log dataJson.bnaFileName
+            console.log name
+            console.log ''
             console.log(process.cwd() + '/../')
             try
-              a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', name, version, dataJson.bnaFileName],
+              a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', jsonName, version, dataJson.bnaFileName],
                 cwd: process.cwd() + '/../'
               )
               console.log a
+              b = await execa('./restapi.sh', [dataJson.name + '.hyperledgerclient', jsonName, composerRestPort],
+                cwd: process.cwd() + '/../'
+              )
+              password = config.get('server.password')
+              serverPort = null
+              # @todo get an available server ip
+
+              # Fetch a port from the server for reverse ssh to work               
+              baseUrl = config.get('server.restBaseUrl')
+              client = request.createClient(baseUrl)
+              console.log 'for lock server port we need to associate what information'
+              console.log 'associate the jsonName ' + jsonName
+              # The next two are the same
+              console.log 'the name? ' + name
+              console.log 'dataJson.name: ' + dataJson.name
+              # its undefined console.log 'json.uuid: ' + json.uuid
+              console.log 'dataJson.bnaFileName: ' + dataJson.bnaFileName
+              lockedPort = await client.post('proxyServiceApi/lockServerPort', {
+                uuid: json.uuid
+                hyperledgerLogicalName: name # BEEDED
+                bnaLogicalName: jsonName # NEEDED
+                version: version
+                bnaFileName: dataJson.bnaFileName
+                secretKey: @secretKey
+              })
+              serverPort = lockedPort.body.serverPort
+
+              console.log 'the server port is ' + serverPort
+
+              serverIp = config.get('server.ipAddress')
+              # ssh pass from inside this docker container to the server to create reverse proxy
+              c = await execa('docker', ['exec', '-d', name + '.hyperledgerclient', '/usr/bin/sshpass', '-p', password, 'ssh', '-o', 'ServerAliveInterval=60', '-o', 'ServerAliveCountMax=120', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', '-N', '-R', serverPort.toString() + ':hyperledgerclient:' + composerRestPort.toString(), 'root@' + serverIp],
+                cwd: process.cwd() + '/../'
+              )
+              console.log 'in theory we have now set up the reverse ssh stuff!!!!!!'
+              console.log c
+              # docker exec hyperledger0adcca29f53f4c748ca78eb192f8b802.hyperledgerclient composer-rest-server -c admin@acceptance-of-delivery_7hhp1nq1m -n always -u true -w true -p 1234')
             catch ex 
               console.log ex 
             console.log 'then to execute a shell script to deploy the bna to that hyperledger'
