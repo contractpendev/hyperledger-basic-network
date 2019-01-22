@@ -46,8 +46,14 @@ RUN npm config set unsafe-perm=true
 RUN npm install -g composer-rest-server
 RUN npm install -g composer-cli
 
-RUN cd /root; mkdir .ssh; cd /root/.ssh; echo '' > known_hosts
+#RUN cd /root; mkdir .ssh; cd /root/.ssh; echo '' > known_hosts
 
-#RUN composer card import --file ./PeerAdmin@hlfv12.card
-
-
+# Composer needed for customizing starting path of composer rest server
+RUN apt-get install -y git
+RUN cd /home; git clone https://github.com/hyperledger/composer.git
+RUN cd /home/composer/packages/composer-rest-server; npm install
+RUN cd /home/composer/packages/composer-rest-server; npm install fs --save
+COPY ./composer-rest-server-patch/root.js /home/composer/packages/composer-rest-server/server/boot/
+COPY ./composer-rest-server-patch/cli.js /home/composer/packages/composer-rest-server/
+COPY ./composer-rest-server-patch/server.js /home/composer/packages/composer-rest-server/server/
+#COPY ./composer-rest-server-patch/config.json /home/composer/packages/composer-rest-server/server/

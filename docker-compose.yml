@@ -163,15 +163,18 @@ services:
         aliases:
          - blockchain-explorer-db
          
+#     image: contractpen/hyperledger-explorer-patched         
   blockchain-explorer:
     container_name: ${COMPOSE_PROJECT_NAME}.blockchain-explorer
-    image: hyperledger/explorer
+    image: contractpen/hyperledger-explorer-patched 
     tty: true
     environment:
       - DATABASE_HOST=blockchain-explorer-db
       - DATABASE_DATABASE=explorer_db_name
       - DATABASE_USERNAME=hppoc
       - DATABASE_PASSWORD=password
+      - COMPOSE_PROJECT_UUID=${COMPOSE_PROJECT_UUID}
+      - PUBLIC_URL=/hyperledger/${COMPOSE_PROJECT_UUID}
     volumes:
       - ./config/config.json:/opt/explorer/app/platform/fabric/config.json
       - ./config/crypto-config:/tmp/crypto
@@ -222,7 +225,7 @@ services:
          
   hyperledgerclient:
     image: contractpen/commandline
-    command: /bin/bash ./contractpen-hyperledger-client/run_in_docker.sh ${COMPOSE_PROJECT_NAME} ${COMPOSE_CONTROLLER_UUID}
+    command: /bin/bash ./contractpen-hyperledger-client/run_in_docker.sh ${COMPOSE_PROJECT_NAME} ${COMPOSE_CONTROLLER_UUID} ${COMPOSE_PROJECT_UUID}
     volumes:
     - ./../../nodejs/:/home/nodejs
     - ./../../cli/:/home/cli

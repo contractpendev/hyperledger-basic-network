@@ -26,6 +26,7 @@ cp .env_original data/$1/.env
 echo "COMPOSE_PROJECT_NAME=$1\n" > data/$1/.env
 echo "COMPOSE_CONTROLLER_UUID=$2\n" >> data/$1/.env
 echo "FABRIC_SERVER_CERTIFICATE_FILE=\n" >> data/$1/.env
+echo "COMPOSE_PROJECT_UUID=$3\n" >> data/$1/.env
 #echo "FABRIC_SERVER_CERTIFICATE_FILE=${OUTPUT}\n" >> data/$1/.env
 
 cp docker-compose.yml data/$1
@@ -52,6 +53,7 @@ cp ../../.env_original .env
 echo "COMPOSE_PROJECT_NAME=$1\n" > .env
 echo "COMPOSE_CONTROLLER_UUID=$2\n" >> .env
 echo "FABRIC_SERVER_CERTIFICATE_FILE=${OUTPUT}\n" >> .env
+echo "COMPOSE_PROJECT_UUID=$3\n" >> .env
 cd ..
 cd ..
 

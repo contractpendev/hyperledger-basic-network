@@ -45,6 +45,7 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/h
 #sleep ${FABRIC_START_TIMEOUT}
 
 docker-compose -f docker-compose.yml up -d blockchain-explorer
+docker exec $1.blockchain-explorer /bin/sh -c 'cd /opt/explorer/client; npm run build'
 docker-compose -f docker-compose.yml up -d cli
 
 #docker-compose -f docker-compose.yml up -d commandline

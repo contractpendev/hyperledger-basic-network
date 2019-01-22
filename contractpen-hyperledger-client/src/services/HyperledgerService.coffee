@@ -35,13 +35,13 @@ class HyperledgerService
     # fi
     # sshpass -p 'PASSWORD' ssh -N -R 2210:localhost:8090 root@IPADDRESS
 
-  startHyperledgerInstance: (name, uuid) =>
+  startHyperledgerInstance: (name, uuidOfController, uuid) =>
     console.log 'we are outside docker and going to start instance by name for name :' + name + ':'  
     try
-      b = await execa('./generate.sh', [name, uuid],
+      b = await execa('./generate.sh', [name, uuidOfController, uuid],
         cwd: process.cwd() + '/../'
       )
-      c = await execa('./start_docker.sh', [name],
+      c = await execa('./start_docker.sh', [name, uuid],
         cwd: process.cwd() + '/../'
       )          
     catch e 
@@ -145,6 +145,7 @@ class HyperledgerService
           console.log 'websocket message from server is'
           console.log dataJson
         if dataJson.command == 'deployBnaToHyperledgerInstance'
+          nameInsideZip = ''
           job = dataJson.job
           try
             #dataJsonName = dataJson.name
@@ -168,6 +169,7 @@ class HyperledgerService
             await @downloadFile(downloadUrl, bnaDest)
             json = await @readPackageJsonFromArchive(bnaDest)
             jsonName = json.name
+            nameInsideZip = jsonName
             version = json.version
             console.log 'jsonName ' + jsonName
             console.log 'version ' + version
@@ -181,16 +183,25 @@ class HyperledgerService
             console.log version
             console.log dataJson.bnaFileName
             console.log name
-            console.log ''
+            console.log 'json is'
+            console.log dataJson
+            prefixUrl = '/hyperledgerrest/' + dataJson.uuid + '/' + json.name + '/'
+            console.log 'prefix url ----------------------------------------'
+            console.log prefixUrl
+            console.log 
             console.log(process.cwd() + '/../')
             try
               a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', jsonName, version, dataJson.bnaFileName],
                 cwd: process.cwd() + '/../'
               )
               console.log a
-              b = await execa('./restapi.sh', [dataJson.name + '.hyperledgerclient', jsonName, composerRestPort],
+              console.log 'attempting to start rest api ##############################################################################'
+              b = await execa('./restapi.sh', [dataJson.name + '.hyperledgerclient', jsonName, composerRestPort, prefixUrl],
                 cwd: process.cwd() + '/../'
               )
+              console.log 'attempting to start rest api ##############################################################################'
+              console.log b
+              console.log 'attempting to start rest api ##############################################################################'
               password = config.get('server.password')
               serverPort = null
               # @todo get an available server ip
@@ -234,6 +245,7 @@ class HyperledgerService
             # transactionId and job need to be sent to some server URL to notify on REDIS the job result
           catch e 
             console.log e 
+          job.nameInsideZip = nameInsideZip  
           data =
             command: 'workerFinishedJob'
             uuid: @uuid
@@ -249,15 +261,17 @@ class HyperledgerService
           )
         if dataJson.command == 'startHyperledgerInstance'  
           name = dataJson.hyperledgerName
+          uuid = uuidv4().toString()          
           baseUrl = config.get('server.restBaseUrl')
           client = request.createClient(baseUrl)        
           await client.post('proxyServiceApi/attemptingToStartHyperledgerClient', 
             secretKey: @secretKey
             hyperledgerName: name
+            uuid: uuid
           )      
           # Start it
           # Once started then store the name and tell server it is started
-          await @startHyperledgerInstance name, @uuid
+          await @startHyperledgerInstance name, @uuid, uuid
         if dataJson.command == 'startMultipleHyperledgerInstances'  
           total = dataJson.total
 
@@ -275,12 +289,14 @@ class HyperledgerService
           # Start it
           # Once started then store the name and tell server it is started
           for name in names
-            console.log 'Attempting to start hyperledger with name :' + name + ':'
+            uuid = uuidv4().toString()
+            console.log 'Attempting to start hyperledger with name :' + name + ':' + uuid
             await client.post('proxyServiceApi/attemptingToStartHyperledgerClient', 
               secretKey: @secretKey
               hyperledgerName: name
+              uuid: uuid
             )      
-            await @startHyperledgerInstance name, @uuid
+            await @startHyperledgerInstance name, @uuid, uuid
             console.log 'finished start hyperledger :' + name + ':'
     catch e
       setTimeout(() => 
@@ -299,7 +315,8 @@ class HyperledgerService
     optionDefinitions = [
       { name: 'command', defaultOption: true },
       { name: 'name', alias: 'n', type: String },
-      { name: 'composeControllerUuid', alias: 'c', type: String }
+      { name: 'composeControllerUuid', alias: 'c', type: String },
+      { name: 'uuid', alias: 'u', type: String }
     ]
     try
       options = commandLineArgs(optionDefinitions)
@@ -311,6 +328,8 @@ class HyperledgerService
         console.log 'The parent is ' + options.composeControllerUuid
         console.log 'current directory is :' + process.cwd() + ':'
         @composeControllerUuid = options.composeControllerUuid
+        uuid = options.uuid
+        console.log 'uuid is ' + uuid
         serverIp = config.get('server.ipAddress')
         password = config.get('server.password')
         # Generate the primary card if it does not already exist
@@ -344,10 +363,11 @@ class HyperledgerService
           name: options.name
           composeControllerUuid: options.composeControllerUuid
           secretKey: @secretKey
+          uuid: uuid
         })
 
         serverPort = hyperledgerServerPortAndUuid.body.serverPort
-        uuid = hyperledgerServerPortAndUuid.body.uuid
+        #uuid = hyperledgerServerPortAndUuid.body.uuid
 
         console.log 'uuid is ' + uuid
 
@@ -385,8 +405,9 @@ class HyperledgerService
         #  console.log e 
       else if command == 'startOutsideDocker' 
         if options.name
-          console.log 'project name is :' + options.name + ':'
-          @startHyperledgerInstance options.name, @uuid
+          uuid = uuidv4().toString()          
+          console.log 'project name is :' + options.name + ':' + uuid
+          @startHyperledgerInstance options.name, @uuid, uuid
         else 
           console.log 'starting as a server'   
           @startServer()
