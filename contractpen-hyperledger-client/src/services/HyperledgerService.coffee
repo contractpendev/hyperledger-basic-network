@@ -154,8 +154,9 @@ class HyperledgerService
             bnaFileName = dataJson.bnaFileName             
             transactionId = dataJson.job.transactionId
             name = dataJson.name
+            email = dataJson.email
             console.log ' '
-            console.log ''
+            console.log 'email is ' + email
             console.log 'command is ' + dataJson.command
             console.log 'task should be to download the bna and place it in directory data/' + name + '/bna'
             console.log 'the filename is ' + dataJson.bnaFileName
@@ -245,7 +246,9 @@ class HyperledgerService
             # transactionId and job need to be sent to some server URL to notify on REDIS the job result
           catch e 
             console.log e 
-          job.nameInsideZip = nameInsideZip  
+          job.nameInsideZip = nameInsideZip 
+          job.uuid = dataJson.uuid
+          job.name = dataJson.name 
           data =
             command: 'workerFinishedJob'
             uuid: @uuid
