@@ -1,2 +1,3 @@
 npm run compile
-coffee src/EntryPoint.coffee
+node src/EntryPoint.js
+
