@@ -23,6 +23,7 @@ class HyperledgerService
     @secretKey = config.get('server.secretKey')
     @accordZipUrl = config.get('server.accordZipUrl')
     @composeControllerUuid = null
+    @currentlyStartingMultiple = false
 
   reverseProxy: () =>
     serverIp = config.get('server.ipAddress')
@@ -38,7 +39,8 @@ class HyperledgerService
         cwd: process.cwd() + '/../'
       )          
     catch e 
-      console.log e 
+      @opts.logger.log('error', 'Exception thrown during attempt to generate crypto material or start hyperledger')
+      @opts.logger.log('error', e)
 
   sendPing: () =>
     if (@ws.readyState == @ws.CLOSED)
@@ -168,9 +170,11 @@ class HyperledgerService
                 cwd: process.cwd() + '/../'
               )
             catch ex 
-              console.log ex 
+              @opts.logger.log('error', 'Error occured during deployment of BNA file to Hyperledger')
+              @opts.logger.log('error', ex)
           catch e 
-            console.log e 
+            @opts.logger.log('error', 'Error occured during deployment of BNA file to Hyperledger')
+            @opts.logger.log('error', e)
           job.nameInsideZip = nameInsideZip 
           job.uuid = dataJson.uuid
           job.name = dataJson.name 
@@ -201,25 +205,28 @@ class HyperledgerService
           # Once started then store the name and tell server it is started
           await @startHyperledgerInstance name, @uuid, uuid
         if dataJson.command == 'startMultipleHyperledgerInstances'  
-          total = dataJson.total
-          numbers = [1..total]
-          names = numbers.map((n) ->
-            'hyperledger' + uuidv4().split('-').join('')
-          )
-          # Here create total names in an array and then send that to the server and attempt to start them 
-          baseUrl = config.get('server.restBaseUrl')
-          client = request.createClient(baseUrl)        
-  
-          # Start it
-          # Once started then store the name and tell server it is started
-          for name in names
-            uuid = uuidv4().toString()
-            await client.post('proxyServiceApi/attemptingToStartHyperledgerClient', 
-              secretKey: @secretKey
-              hyperledgerName: name
-              uuid: uuid
-            )      
-            await @startHyperledgerInstance name, @uuid, uuid
+          if (!@currentlyStartingMultiple)
+            @currentlyStartingMultiple = true
+            total = dataJson.total
+            numbers = [1..total]
+            names = numbers.map((n) ->
+              'hyperledger' + uuidv4().split('-').join('')
+            )
+            # Here create total names in an array and then send that to the server and attempt to start them 
+            baseUrl = config.get('server.restBaseUrl')
+            client = request.createClient(baseUrl)        
+    
+            # Start it
+            # Once started then store the name and tell server it is started
+            for name in names
+              uuid = uuidv4().toString()
+              await client.post('proxyServiceApi/attemptingToStartHyperledgerClient', 
+                secretKey: @secretKey
+                hyperledgerName: name
+                uuid: uuid
+              )    
+              await @startHyperledgerInstance name, @uuid, uuid
+            @currentlyStartingMultiple = false  
     catch e
       setTimeout(() => 
         @startServer()
@@ -254,13 +261,16 @@ class HyperledgerService
             createCard = await execa('./../cli/createcard.sh')
             console.log createCard
           catch ex 
-            console.log ex           
+            @opts.logger.log('error', 'Error occured during creation of crypt card material for Hyperledger')
+            @opts.logger.log('error', ex)
         # Check if this ssh server ip is ok with our ssh
         output = {}
         try
           output = await execa('/usr/bin/ssh-keygen', ['-F', serverIp])
           console.log output
         catch ex 
+          @opts.logger.log('error', 'Error occured')
+          @opts.logger.log('error', ex)
           output = ex 
         # output.code equals 0 is success
         if output.code != 0
@@ -288,18 +298,19 @@ class HyperledgerService
           try
             await execa('/usr/bin/sshpass', ['-p', password, 'ssh', '-o', 'ServerAliveInterval=60', '-o', 'ServerAliveCountMax=120', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', '-N', '-R', serverPort.toString() + ':blockchain-explorer:8080', 'root@' + serverIp])
           catch ex 
-            console.log ex 
-          await @sleep(5000)
+            @opts.logger.log('error', 'Error occured during ssh reverse proxy')
+            @opts.logger.log('error', ex)
+          await @sleep(5000) # Sleep 5 seconds and try again
       else if command == 'startOutsideDocker' 
         if options.name
           uuid = uuidv4().toString()          
-          @startHyperledgerInstance options.name, @uuid, uuid
+          await @startHyperledgerInstance options.name, @uuid, uuid
         else 
           @startServer()
       else 
         console.log 'need to use a command line option either as startInDocker or startOutsideDocker'    
     catch e
-      console.log e  
+      @opts.logger.log('error', e)
     @opts.logger.log('info', 'Start of HyperledgerService')
 
 module.exports = HyperledgerService
