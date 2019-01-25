@@ -1,6 +1,4 @@
 #!/bin/sh
-
-
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}/data/$1/
 CHANNEL_NAME=mychannel
@@ -29,7 +27,6 @@ echo "COMPOSE_PROJECT_NAME=$1\n" > data/$1/.env
 echo "COMPOSE_CONTROLLER_UUID=$2\n" >> data/$1/.env
 echo "FABRIC_SERVER_CERTIFICATE_FILE=\n" >> data/$1/.env
 echo "COMPOSE_PROJECT_UUID=$3\n" >> data/$1/.env
-#echo "FABRIC_SERVER_CERTIFICATE_FILE=${OUTPUT}\n" >> data/$1/.env
 
 cp docker-compose.yml data/$1
 cd data/$1

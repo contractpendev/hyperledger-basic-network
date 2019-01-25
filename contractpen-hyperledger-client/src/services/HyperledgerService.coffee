@@ -144,10 +144,10 @@ class HyperledgerService
             version = json.version
             prefixUrl = '/hyperledgerrest/' + dataJson.uuid + '/' + json.name + '/'
             try
-              a = await execa('./cli/deploy_bna.sh', [dataJson.name + '.hyperledgerclient', jsonName, version, dataJson.bnaFileName],
+              a = await execa('./cli/deploy_bna_called_outside_docker.sh', [dataJson.name + '.hyperledgerclient', jsonName, version, dataJson.bnaFileName],
                 cwd: process.cwd() + '/../'
               )
-              b = await execa('./cli/restapi.sh', [dataJson.name + '.hyperledgerclient', jsonName, composerRestPort, prefixUrl],
+              b = await execa('./cli/restapi_called_outside_docker.sh', [dataJson.name + '.hyperledgerclient', jsonName, composerRestPort, prefixUrl],
                 cwd: process.cwd() + '/../'
               )
               password = config.get('server.password')
