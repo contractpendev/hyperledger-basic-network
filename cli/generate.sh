@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}/data/$1/
 CHANNEL_NAME=mychannel
@@ -13,8 +14,9 @@ mkdir data/$1
 mkdir data/$1/config
 mkdir data/$1/bna
 
-cp *.yaml data/$1/config/
-cp config.json data/$1/config/config.json
+cp ./config/configtx.yaml data/$1/config/
+cp ./config/crypto-config.yaml data/$1/config/
+cp ./config/config.json data/$1/config/config.json
 
 # environment variables
 rm -f data/$1/.env
@@ -22,7 +24,7 @@ rm -f data/$1/.env
 #OUTPUT="$(ls *_sk)"
 #echo "${OUTPUT}"
 #cd ../../../../../../
-cp .env_original data/$1/.env
+touch data/$1/.env
 echo "COMPOSE_PROJECT_NAME=$1\n" > data/$1/.env
 echo "COMPOSE_CONTROLLER_UUID=$2\n" >> data/$1/.env
 echo "FABRIC_SERVER_CERTIFICATE_FILE=\n" >> data/$1/.env
@@ -49,7 +51,7 @@ cd ./config/crypto-config/peerOrganizations/org1.example.com/ca/
 OUTPUT="$(ls *_sk)"
 echo "${OUTPUT}"
 cd ../../../../../
-cp ../../.env_original .env
+touch .env
 echo "COMPOSE_PROJECT_NAME=$1\n" > .env
 echo "COMPOSE_CONTROLLER_UUID=$2\n" >> .env
 echo "FABRIC_SERVER_CERTIFICATE_FILE=${OUTPUT}\n" >> .env

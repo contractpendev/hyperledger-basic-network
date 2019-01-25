@@ -37,11 +37,12 @@ class HyperledgerService
 
   startHyperledgerInstance: (name, uuidOfController, uuid) =>
     console.log 'we are outside docker and going to start instance by name for name :' + name + ':'  
+    console.log process.cwd() + '/../'
     try
-      b = await execa('./generate.sh', [name, uuidOfController, uuid],
+      b = await execa('./cli/generate.sh', [name, uuidOfController, uuid],
         cwd: process.cwd() + '/../'
       )
-      c = await execa('./start_docker.sh', [name, uuid],
+      c = await execa('./cli/start_docker.sh', [name, uuid],
         cwd: process.cwd() + '/../'
       )          
     catch e 
@@ -192,12 +193,12 @@ class HyperledgerService
             console.log 
             console.log(process.cwd() + '/../')
             try
-              a = await execa('./deploy_bna.sh', [dataJson.name + '.hyperledgerclient', jsonName, version, dataJson.bnaFileName],
+              a = await execa('./cli/deploy_bna.sh', [dataJson.name + '.hyperledgerclient', jsonName, version, dataJson.bnaFileName],
                 cwd: process.cwd() + '/../'
               )
               console.log a
               console.log 'attempting to start rest api ##############################################################################'
-              b = await execa('./restapi.sh', [dataJson.name + '.hyperledgerclient', jsonName, composerRestPort, prefixUrl],
+              b = await execa('./cli/restapi.sh', [dataJson.name + '.hyperledgerclient', jsonName, composerRestPort, prefixUrl],
                 cwd: process.cwd() + '/../'
               )
               console.log 'attempting to start rest api ##############################################################################'

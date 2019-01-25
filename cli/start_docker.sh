@@ -7,6 +7,8 @@
 # Exit on first error, print all commands.
 #
 # $1 is the project name
+
+
 cp docker-compose.yml data/$1
 cd data/$1
 set -ev
