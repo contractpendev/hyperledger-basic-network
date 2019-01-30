@@ -2,6 +2,17 @@
 var Client = require('fabric-client');
 const fs = require('fs');
 
+
+function className(obj) {
+  console.log(obj.constructor.toString());
+};
+
+function getAllMethods(object) {
+  return Object.getOwnPropertyNames(object).filter(function(property) {
+      return typeof object[property] == 'function';
+  });
+};
+
 async function main() {
   var client = Client.loadFromConfig('../cli/connection.json');
   var mspId = client.getMspid();
@@ -24,7 +35,10 @@ async function main() {
   //console.log(installedChaincodes);
   var chaincodes = installedChaincodes.getChaincodes();
   for (var n = 0; n < chaincodes.length; n=n+1) {
-    console.log(chaincodes[n].name + " " + chaincodes[n].version);
+    var code = chaincodes[n];
+    console.log(code);
+    console.log(getAllMethods(code));
+    console.log(code.name + " " + code.version);
   }
 }
 
