@@ -141,7 +141,8 @@ services:
         - ./config/:/root/config
         - ./config/crypto-config/:/root/crypto-config
         - ./../../contractpen-hyperledger-client/:/root/contractpen-hyperledger-client
-        - ./bna/:/root/bna        
+        - ./bna/:/root/bna    
+        - ./config/crypto-config/hfc-key-store/:/root/nodejs/hfc-key-store    
     networks:
       basic:
       nointernet:
@@ -185,8 +186,8 @@ services:
     volumes:
       - ./config/config.json:/opt/explorer/app/platform/fabric/config.json
       - ./config/crypto-config:/tmp/crypto
-    ports:
-      - "8090:8080"
+#    ports:
+#      - "8090:8080"
     networks:
       basic:
       nointernet:

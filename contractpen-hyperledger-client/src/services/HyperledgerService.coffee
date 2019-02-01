@@ -35,10 +35,14 @@ class HyperledgerService
       b = await execa('./cli/generate.sh', [name, uuidOfController, uuid],
         cwd: process.cwd() + '/../'
       )
+      console.log 'before start docker'
       c = await execa('./cli/start_docker.sh', [name, uuid],
         cwd: process.cwd() + '/../'
       )          
+      console.log 'after start docker'
+      console.log c
     catch e 
+      console.log e
       @opts.logger.log('error', 'Exception thrown during attempt to generate crypto material or start hyperledger')
       @opts.logger.log('error', e)
 
@@ -144,12 +148,20 @@ class HyperledgerService
             version = json.version
             prefixUrl = '/hyperledgerrest/' + dataJson.uuid + '/' + json.name + '/'
             try
-              a = await execa('./cli/deploy_bna_called_outside_docker.sh', [dataJson.name + '.hyperledgerclient', jsonName, version, dataJson.bnaFileName],
+              console.log 'attempting to start bna with the following information'
+              console.log dataJson.name
+              console.log jsonName
+              console.log version
+              console.log dataJson.bnaFileName
+              a = await execa('./cli/deploy_bna_called_outside_docker.sh', [dataJson.name + '.cli', jsonName, version, dataJson.bnaFileName],
                 cwd: process.cwd() + '/../'
               )
-              b = await execa('./cli/restapi_called_outside_docker.sh', [dataJson.name + '.hyperledgerclient', jsonName, composerRestPort, prefixUrl],
-                cwd: process.cwd() + '/../'
-              )
+              console.log 'after'
+              console.log a
+              #b = await execa('./cli/restapi_called_outside_docker.sh', [dataJson.name + '.hyperledgerclient', jsonName, composerRestPort, prefixUrl],
+              #  cwd: process.cwd() + '/../'
+              #)
+              #console.log b
               password = config.get('server.password')
               serverPort = null
               # Fetch a port from the server for reverse ssh to work               
@@ -170,9 +182,11 @@ class HyperledgerService
                 cwd: process.cwd() + '/../'
               )
             catch ex 
+              console.log ex
               @opts.logger.log('error', 'Error occured during deployment of BNA file to Hyperledger')
               @opts.logger.log('error', ex)
           catch e 
+            console.log e
             @opts.logger.log('error', 'Error occured during deployment of BNA file to Hyperledger')
             @opts.logger.log('error', e)
           job.nameInsideZip = nameInsideZip 

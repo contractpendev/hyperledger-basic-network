@@ -21,7 +21,11 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/h
 # Join peer0.org1.example.com to the channel.
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" $1.peer0.org1.example.com peer channel join -b mychannel.block
 docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@org1.example.com/msp" $1.peer0.org1.example.com peer channel list
+# Blockchain explorer
+# FROM HERE NO START
 docker-compose -f docker-compose.yml up -d blockchain-explorer
 docker exec $1.blockchain-explorer /bin/sh -c 'cd /opt/explorer/client; npm run build'
 docker-compose -f docker-compose.yml up -d cli
 docker-compose -f docker-compose.yml up -d hyperledgerclient
+# Install chaincode
+docker exec $1.cli /bin/sh -c "cd /root/nodejs; ./install.sh"

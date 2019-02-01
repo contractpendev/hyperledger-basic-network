@@ -6,6 +6,6 @@ peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n cicero -c '{"f
 rm -rf hfc-key-store
 node enrollAdmin.js
 node registerUser.js
-node deploy.js "helloworld.cta" sample.txt
+#node deploy.js "helloworld.cta" sample.txt
 #node submitRequest.js request.json 
 #node deploy.js helloworld@0.8.0.cta sample.txt

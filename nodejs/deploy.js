@@ -35,7 +35,7 @@ const deploy = async () => {
   const clauseData = clause.getData();
 const request = {
     fcn: 'deploySmartLegalContract',
-    args: [config.contractId, templateBase64, JSON.stringify(clauseData)],
+    args: [/*config.contractId*/ process.argv[4], templateBase64, JSON.stringify(clauseData)],
   };
 
   return api.proposeAndCommitTransaction(request);
