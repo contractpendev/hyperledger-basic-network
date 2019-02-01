@@ -66,14 +66,15 @@ const proposeAndCommitTransaction = tx => FabricClient.newDefaultKeyValueStore({
     return channel.sendTransactionProposal(request);
   }).then((results) => {
     const proposalResponses = results[0];
-     console.log('Proposal response: ' + JSON.stringify(proposalResponses));
+    console.log('Proposal response');
+     //console.log('Proposal response: ' + JSON.stringify(proposalResponses));
     const proposal = results[1];
     let isProposalGood = false;
     if (proposalResponses && proposalResponses[0].response
             && proposalResponses[0].response.status === 200) {
       isProposalGood = true;
       console.log('Transaction proposal was good');
-      console.log(`Response payload: ${proposalResponses[0].response.payload}`);
+      //console.log(`Response payload: ${proposalResponses[0].response.payload}`);
     } else {
       console.log(JSON.stringify(proposalResponses, null, 4));
       console.error('Transaction proposal was bad');

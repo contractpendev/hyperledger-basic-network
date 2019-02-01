@@ -33,9 +33,17 @@ const deploy = async () => {
   const clause = new Clause(template);
   clause.parse(clauseText);
   const clauseData = clause.getData();
+  console.log('clause data');
+  console.log(clauseData);
+
+  const clauseData2 = { '$class': 'org.accordproject.helloworld.HelloWorldClause',
+  clauseId: '3f645857-d099-4f60-947d-75051df363e9',
+    name: 'Fred Blogs' };
+
+  
 const request = {
     fcn: 'deploySmartLegalContract',
-    args: [/*config.contractId*/ process.argv[4], templateBase64, JSON.stringify(clauseData)],
+    args: [/*config.contractId*/ process.argv[4], templateBase64, JSON.stringify(clauseData2)],
   };
 
   return api.proposeAndCommitTransaction(request);
